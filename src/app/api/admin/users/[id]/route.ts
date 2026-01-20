@@ -11,8 +11,9 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   }
 
   try {
+    const { id } = await params
     const body = await req.json()
-    const [updatedUser] = await db.update(UserTable).set(body).where(eq(UserTable.id, params.id)).returning()
+    const [updatedUser] = await db.update(UserTable).set(body).where(eq(UserTable.id, id)).returning()
 
     return NextResponse.json(updatedUser)
   } catch (error) {
@@ -27,7 +28,8 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   }
 
   try {
-    await db.delete(UserTable).where(eq(UserTable.id, params.id))
+    const { id } = await params
+    await db.delete(UserTable).where(eq(UserTable.id, id))
     return NextResponse.json({ message: "User deleted" })
   } catch (error) {
     return NextResponse.json({ error: "Failed to delete user" }, { status: 500 })

@@ -11,7 +11,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     }
 
     try {
-        const formId = params.id
+        const { id } = await params
+        const formId = id
         const data = await req.json()
 
         const [updatedForm] = await db
@@ -50,7 +51,8 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     }
 
     try {
-        const formId = params.id
+        const { id } = await params
+        const formId = id
         await db.delete(FormDataTable).where(eq(FormDataTable.id, formId))
         return NextResponse.json({ success: true })
     } catch (error) {

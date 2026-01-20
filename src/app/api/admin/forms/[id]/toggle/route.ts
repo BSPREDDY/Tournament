@@ -11,7 +11,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     }
 
     try {
-        const formId = params.id
+        const { id } = await params
+        const formId = id
         const { isEnabled } = await req.json()
 
         // Check if status record exists, if not create it

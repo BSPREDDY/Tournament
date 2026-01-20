@@ -6,6 +6,7 @@ import { Button } from "@/src/components/ui/button"
 import Link from "next/link"
 import { Trophy } from "lucide-react"
 import { UserNavbar } from "@/src/components/user/navbar"
+import { Footer } from "@/src/components/user/footer"
 
 interface DashboardContentProps {
   user: User
@@ -39,10 +40,10 @@ export default function DashboardContent({ user }: DashboardContentProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-background">
       <UserNavbar user={user} />
 
-      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 mt-20">
+      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 mt-20 flex-1">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
@@ -197,6 +198,7 @@ export default function DashboardContent({ user }: DashboardContentProps) {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   )
 }
