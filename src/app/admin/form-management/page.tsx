@@ -8,7 +8,7 @@ import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Label } from "@/src/components/ui/label"
 import { toast } from "sonner"
-import { Search, Edit2, Trash2, Save, Download, Eye, EyeOff, Loader2 } from "lucide-react"
+import { Search, Edit2, Trash2, Save, Download, Eye, EyeOff, Loader2, Plus } from "lucide-react"
 import {
     Dialog,
     DialogContent,
@@ -191,77 +191,92 @@ function FormManagementContent() {
         }
     }
 
+    const handleAddTeam = () => {
+        // Redirect to the registration form for admin to manually add a team
+        window.location.href = "/form"
+    }
+
     return (
         <div className="space-y-6 w-full">
-            <div className="flex justify-between items-start sm:items-center flex-col sm:flex-row gap-4">
+            <div className="flex justify-between items-start flex-col sm:flex-row gap-3 sm:gap-4">
                 <div>
                     <h2 className="text-2xl sm:text-3xl font-bold gradient-text">Form Management</h2>
-                    <p className="text-sm text-muted-foreground mt-1">Total Submissions: {forms.length}</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-1">Total Submissions: {forms.length}</p>
                 </div>
-                <Button
-                    onClick={handleDownloadExcel}
-                    disabled={isDownloading}
-                    className="bg-gradient-to-r from-green-500 to-emerald-500 hover:shadow-lg text-white gap-2 w-full sm:w-auto"
-                >
-                    {isDownloading ? (
-                        <>
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            Downloading...
-                        </>
-                    ) : (
-                        <>
-                            <Download className="w-4 h-4" />
-                            Download Excel
-                        </>
-                    )}
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                    <Button
+                        onClick={handleAddTeam}
+                        className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:shadow-lg text-white gap-2 text-xs sm:text-sm"
+                    >
+                        <Plus className="w-4 h-4 flex-shrink-0" />
+                        <span>Add Team</span>
+                    </Button>
+                    <Button
+                        onClick={handleDownloadExcel}
+                        disabled={isDownloading}
+                        className="bg-gradient-to-r from-green-500 to-emerald-500 hover:shadow-lg text-white gap-2 text-xs sm:text-sm"
+                    >
+                        {isDownloading ? (
+                            <>
+                                <Loader2 className="w-4 h-4 animate-spin flex-shrink-0" />
+                                <span className="hidden sm:inline">Downloading...</span>
+                                <span className="sm:hidden">Download</span>
+                            </>
+                        ) : (
+                            <>
+                                <Download className="w-4 h-4 flex-shrink-0" />
+                                <span>Download Excel</span>
+                            </>
+                        )}
+                    </Button>
+                </div>
             </div>
 
             <Card className="card-glow w-full">
-                <CardHeader>
+                <CardHeader className="px-3 sm:px-6 py-3 sm:py-4">
                     <div className="relative w-full">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
                         <Input
-                            placeholder="Search by team name, IGL name, or email..."
-                            className="pl-10 bg-card/50 border-primary/20 focus:border-primary focus:ring-primary/20 w-full"
+                            placeholder="Search by team, IGL, or email..."
+                            className="pl-9 sm:pl-10 bg-card/50 border-primary/20 focus:border-primary focus:ring-primary/20 w-full text-xs sm:text-sm"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
                     </div>
                 </CardHeader>
-                <CardContent>
-                    <div className="space-y-4 w-full overflow-x-auto">
+                <CardContent className="px-3 sm:px-6 py-3 sm:py-4">
+                    <div className="space-y-3 sm:space-y-4 w-full overflow-x-auto">
                         {filteredForms.map((form) => (
                             <div
                                 key={form.id}
-                                className={`border rounded-lg p-4 space-y-3 hover:shadow-md transition-all duration-200 bg-gradient-to-r ${form.isEnabled
+                                className={`border rounded-lg p-3 sm:p-4 space-y-2 sm:space-y-3 hover:shadow-md transition-all duration-200 bg-gradient-to-r ${form.isEnabled
                                     ? "from-card to-card/50 border-primary/10 hover:border-primary/30"
                                     : "from-card/50 to-card/30 border-destructive/20 hover:border-destructive/40 opacity-75"
                                     }`}
                             >
-                                <div className="flex items-start justify-between flex-col sm:flex-row gap-4">
-                                    <div className="space-y-1 flex-1">
-                                        <h3 className={`font-semibold text-lg ${form.isEnabled ? "text-primary" : "text-destructive"}`}>
+                                <div className="flex items-start justify-between flex-col gap-3">
+                                    <div className="space-y-1 flex-1 w-full">
+                                        <h3 className={`font-semibold text-sm sm:text-lg break-words ${form.isEnabled ? "text-primary" : "text-destructive"}`}>
                                             {form.teamName}
                                         </h3>
-                                        <p className="text-sm text-muted-foreground">IGL: {form.iglName}</p>
+                                        <p className="text-xs sm:text-sm text-muted-foreground truncate">IGL: {form.iglName}</p>
                                     </div>
-                                    <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
+                                    <div className="flex items-center gap-1 sm:gap-2 flex-wrap w-full">
                                         <Button
                                             variant="outline"
                                             size="sm"
                                             onClick={() => toggleFormEnabled(form.id, form.isEnabled)}
-                                            className={`text-xs ${form.isEnabled ? "hover:bg-destructive/10" : "hover:bg-green-500/10"}`}
+                                            className={`text-xs py-1 px-2 sm:px-3 h-8 ${form.isEnabled ? "hover:bg-destructive/10" : "hover:bg-green-500/10"}`}
                                         >
                                             {form.isEnabled ? (
                                                 <>
-                                                    <EyeOff className="w-4 h-4 mr-1" />
-                                                    Disable
+                                                    <EyeOff className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                                                    <span className="hidden sm:inline">Disable</span>
                                                 </>
                                             ) : (
                                                 <>
-                                                    <Eye className="w-4 h-4 mr-1" />
-                                                    Enable
+                                                    <Eye className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                                                    <span className="hidden sm:inline">Enable</span>
                                                 </>
                                             )}
                                         </Button>
@@ -269,46 +284,35 @@ function FormManagementContent() {
                                             variant="outline"
                                             size="sm"
                                             onClick={() => handleEdit(form)}
-                                            className="hover:bg-primary/10 text-xs"
+                                            className="hover:bg-primary/10 text-xs py-1 px-2 sm:px-3 h-8"
                                         >
-                                            <Edit2 className="w-4 h-4 mr-1" />
-                                            Edit
+                                            <Edit2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                                            <span className="hidden sm:inline">Edit</span>
                                         </Button>
                                         <Button
                                             variant="ghost"
                                             size="sm"
-                                            className="text-destructive hover:text-destructive hover:bg-destructive/10 text-xs"
+                                            className="text-destructive hover:text-destructive hover:bg-destructive/10 text-xs py-1 px-2 sm:px-3 h-8"
                                             onClick={() => handleDelete(form.id)}
                                         >
-                                            <Trash2 className="w-4 h-4 mr-1" />
-                                            Delete
+                                            <Trash2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                                            <span className="hidden sm:inline">Delete</span>
                                         </Button>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
-                                    <div>
-                                        <span className="text-muted-foreground">Player 1:</span> {form.player1} ({form.playerId1})
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs sm:text-sm">
+                                    <div className="truncate">
+                                        <span className="text-muted-foreground">P1:</span> <span className="truncate">{form.player1}</span>
                                     </div>
-                                    <div>
-                                        <span className="text-muted-foreground">Player 2:</span> {form.player2} ({form.playerId2})
+                                    <div className="truncate">
+                                        <span className="text-muted-foreground">P2:</span> <span className="truncate">{form.player2}</span>
                                     </div>
-                                    <div>
-                                        <span className="text-muted-foreground">Player 3:</span> {form.player3 || "N/A"} (
-                                        {form.playerId3 || "N/A"})
-                                    </div>
-                                    <div>
-                                        <span className="text-muted-foreground">Player 4:</span> {form.player4 || "N/A"} (
-                                        {form.playerId4 || "N/A"})
-                                    </div>
-                                    <div>
-                                        <span className="text-muted-foreground">Email:</span> {form.iglMail}
-                                    </div>
-                                    <div>
-                                        <span className="text-muted-foreground">Phone:</span> {form.iglNumber}
+                                    <div className="col-span-2 md:col-span-1 truncate">
+                                        <span className="text-muted-foreground">Email:</span> <span className="truncate">{form.iglMail}</span>
                                     </div>
                                 </div>
                                 <div className="text-xs text-muted-foreground">
-                                    Submitted: {new Date(form.createdAt).toLocaleString()}
+                                    Submitted: {new Date(form.createdAt).toLocaleDateString()}
                                 </div>
                             </div>
                         ))}

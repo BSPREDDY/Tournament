@@ -23,8 +23,7 @@ export default function RegistrationStatusPage() {
 
     useEffect(() => {
         fetchRegistrationConfig()
-        const interval = setInterval(fetchRegistrationConfig, 2000) // Update every 2 seconds for real-time deadline checking
-        return () => clearInterval(interval)
+        // Only fetch once on mount - no polling to avoid infinite API calls
     }, [])
 
     const fetchRegistrationConfig = async () => {
@@ -158,12 +157,12 @@ export default function RegistrationStatusPage() {
     }
 
     return (
-        <div className="space-y-8 max-w-4xl mx-auto">
+        <div className="space-y-6 sm:space-y-8 max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
             <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-cyan-500 bg-clip-text text-transparent mb-2">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-cyan-500 bg-clip-text text-transparent mb-2">
                     Registration Status
                 </h1>
-                <p className="text-muted-foreground">Manage tournament registration deadlines and status</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Manage tournament registration deadlines and status</p>
             </div>
 
             {/* Current Status Card */}
@@ -175,21 +174,21 @@ export default function RegistrationStatusPage() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                         {/* Status Indicator */}
-                        <div className="flex flex-col md:flex-row items-start md:items-center gap-4 p-6 rounded-lg bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/20">
-                            <div className="flex-1 w-full">
-                                <p className="text-sm text-muted-foreground mb-1">Registration Status</p>
+                        <div className={`flex flex-col gap-4 p-4 sm:p-6 rounded-lg border ${config?.isRegistrationOpen ? 'bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/20' : 'bg-gradient-to-br from-red-500/10 to-orange-500/10 border-red-500/20'}`}>
+                            <div className="flex-1">
+                                <p className="text-xs sm:text-sm text-muted-foreground mb-2">Registration Status</p>
                                 <div className="flex items-center gap-2">
                                     {config?.isRegistrationOpen ? (
                                         <>
-                                            <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                                            <span className="text-lg font-semibold text-green-500">Open</span>
+                                            <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 flex-shrink-0" />
+                                            <span className="text-base sm:text-lg font-semibold text-green-500">Open</span>
                                         </>
                                     ) : (
                                         <>
-                                            <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
-                                            <span className="text-lg font-semibold text-red-500">Closed</span>
+                                            <XCircle className="w-5 h-5 sm:w-6 sm:h-6 text-red-500 flex-shrink-0" />
+                                            <span className="text-base sm:text-lg font-semibold text-red-500">Closed</span>
                                         </>
                                     )}
                                 </div>
@@ -198,18 +197,20 @@ export default function RegistrationStatusPage() {
                                 onClick={handleToggleRegistration}
                                 disabled={isSaving}
                                 variant="outline"
-                                className="w-full md:w-auto mt-4 md:mt-0 hover:bg-primary/10 bg-transparent"
+                                className="w-full hover:bg-primary/10 bg-transparent text-xs sm:text-sm"
                             >
                                 {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : "Toggle Status"}
                             </Button>
                         </div>
 
                         {/* Deadline Info */}
-                        <div className="flex items-start md:items-center gap-4 p-6 rounded-lg bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20">
-                            <Clock className="w-6 h-6 text-primary flex-shrink-0 mt-1 md:mt-0" />
-                            <div className="flex-1 min-w-0">
-                                <p className="text-sm text-muted-foreground mb-1">Time Remaining</p>
-                                <p className="font-semibold text-lg break-words">{calculateTimeRemaining() || "No deadline set"}</p>
+                        <div className="flex flex-col gap-4 p-4 sm:p-6 rounded-lg bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20">
+                            <div className="flex items-start gap-3 sm:gap-4">
+                                <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-primary flex-shrink-0 mt-0.5" />
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-xs sm:text-sm text-muted-foreground mb-1">Time Remaining</p>
+                                    <p className="font-semibold text-sm sm:text-lg break-words">{calculateTimeRemaining() || "No deadline set"}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -230,18 +231,18 @@ export default function RegistrationStatusPage() {
             {/* Set Deadline Card */}
             <Card className="border-2 border-secondary/20 shadow-lg">
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <Calendar className="w-6 h-6 text-secondary" />
-                        Set Registration Deadline
+                    <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
+                        <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-secondary flex-shrink-0" />
+                        <span className="truncate">Set Registration Deadline</span>
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <form onSubmit={handleUpdateDeadline} className="space-y-6">
-                        <div className="space-y-2">
-                            <Label htmlFor="deadline" className="text-base font-semibold">
+                    <form onSubmit={handleUpdateDeadline} className="space-y-4 sm:space-y-6">
+                        <div className="space-y-2 sm:space-y-3">
+                            <Label htmlFor="deadline" className="text-sm sm:text-base font-semibold">
                                 Registration Deadline Date & Time
                             </Label>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-xs sm:text-sm text-muted-foreground">
                                 Select when you want to close registration. Users won't be able to submit forms after this time.
                             </p>
                             <Input
@@ -249,7 +250,7 @@ export default function RegistrationStatusPage() {
                                 type="datetime-local"
                                 value={registrationDeadline}
                                 onChange={(e) => setRegistrationDeadline(e.target.value)}
-                                className="mt-2 bg-card/50 border-primary/20 focus:border-primary focus:ring-primary/20"
+                                className="mt-2 bg-card/50 border-primary/20 focus:border-primary focus:ring-primary/20 text-sm"
                                 required
                             />
                             {registrationDeadline && (
@@ -259,26 +260,26 @@ export default function RegistrationStatusPage() {
                             )}
                         </div>
 
-                        <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
-                            <p className="text-sm text-muted-foreground">
-                                <strong>Note: </strong> Once the deadline passes, users will see a "Registration Closed" message and
-                                won't be able to submit new registrations. You can manually toggle the registration status above.
+                        <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3 sm:p-4">
+                            <p className="text-xs sm:text-sm text-muted-foreground">
+                                <strong>Note:</strong> Once the deadline passes, users will see a "Registration Closed" message and won't be able to submit new registrations. You can manually toggle the registration status above.
                             </p>
                         </div>
 
                         <Button
                             type="submit"
                             disabled={isSaving || !registrationDeadline}
-                            className="w-full bg-gradient-to-r from-primary to-secondary text-white hover:shadow-lg gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-gradient-to-r from-primary to-secondary text-white hover:shadow-lg gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                         >
                             {isSaving ? (
                                 <>
-                                    <Loader2 className="w-4 h-4 animate-spin" />
-                                    Updating...
+                                    <Loader2 className="w-4 h-4 animate-spin flex-shrink-0" />
+                                    <span className="hidden sm:inline">Updating...</span>
+                                    <span className="sm:hidden">Updating</span>
                                 </>
                             ) : (
                                 <>
-                                    <Save className="w-4 h-4" />
+                                    <Save className="w-4 h-4 flex-shrink-0" />
                                     Save Deadline
                                 </>
                             )}
@@ -290,25 +291,21 @@ export default function RegistrationStatusPage() {
             {/* Info Card */}
             <Card className="bg-gradient-to-br from-secondary/5 to-primary/5 border-secondary/20">
                 <CardHeader>
-                    <CardTitle className="text-lg">How Registration Deadline Works</CardTitle>
+                    <CardTitle className="text-lg sm:text-xl">How Registration Deadline Works</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-3 text-sm text-muted-foreground">
+                <CardContent className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-muted-foreground">
                     <p>
-                        When you set a registration deadline, the system will automatically prevent users from submitting the
-                        tournament registration form after that time.
+                        When you set a registration deadline, the system will automatically prevent users from submitting the tournament registration form after that time.
                     </p>
                     <p>You have two ways to control registration:</p>
-                    <ul className="list-disc list-inside space-y-2 ml-2">
+                    <ul className="list-disc list-inside space-y-1 sm:space-y-2 ml-2">
                         <li>
-                            <strong>Using Deadline: </strong> Set a specific date and time. Registration closes automatically at that
-                            time.
+                            <strong>Using Deadline:</strong> Set a specific date and time. Registration closes automatically at that time.
                         </li>
                         <li>
-                            <strong>Manual Toggle: </strong> Use the "Toggle Status" button to instantly open or close registration
-                            regardless of the deadline.
+                            <strong>Manual Toggle:</strong> Use the "Toggle Status" button to instantly open or close registration regardless of the deadline.
                         </li>
                     </ul>
-                    <p className="text-xs">The page updates every 2 seconds to show the current status and remaining time.</p>
                 </CardContent>
             </Card>
         </div>

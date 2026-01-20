@@ -36,7 +36,9 @@ export default function LoginPage() {
 
             if (response.ok) {
                 toast.success("Login successful")
-                router.push("/dashboard")
+                // Redirect to admin dashboard if user is admin, else user dashboard
+                const redirectPath = data.user?.role === "admin" ? "/admin" : "/dashboard"
+                router.push(redirectPath)
             } else {
                 toast.error(data.error || "Login failed")
             }
