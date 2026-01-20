@@ -1,4 +1,3 @@
-// sms-service.ts
 "use client"
 
 import app from "./firebase"

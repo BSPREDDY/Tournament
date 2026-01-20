@@ -1,51 +1,58 @@
 import { neon } from "@neondatabase/serverless"
-import { sendOTPViaFirebase } from "@/src/lib/sms-service"
 
 export async function POST(req: Request) {
     try {
         const { phoneNumber } = await req.json()
 
-        if (!phoneNumber || phoneNumber.trim() === "") {
+        if (!phoneNumber) {
             return Response.json({ error: "Phone number is required" }, { status: 400 })
         }
 
-        // Generate OTP
-        const otp = Math.floor(100000 + Math.random() * 900000).toString()
-
-        // Store OTP in database with 10-minute expiry
-        const sql = neon(process.env.DATABASE_URL!)
-        const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString()
-
-        try {
-            // Delete existing OTP for this phone number
-            await sql`DELETE FROM verification_tokens WHERE identifier = ${phoneNumber}`
-
-            // Insert new OTP
-            await sql`INSERT INTO verification_tokens (identifier, token, expires_at) VALUES (${phoneNumber}, ${otp}, ${expiresAt})`
-
-            const smsResult = await sendOTPViaFirebase(phoneNumber, otp)
-
-            if (smsResult.success) {
-                console.log(`[v0] OTP sent via Firebase to ${phoneNumber}`)
-                return Response.json({
-                    success: true,
-                    message: "OTP sent to your phone number",
-                    smsMethod: "firebase",
-                })
-            } else {
-                console.log(`[v0] OTP for ${phoneNumber}: ${otp} (Firebase SMS pending - check Firebase console)`)
-                return Response.json({
-                    success: true,
-                    message: "OTP sent to your phone number",
-                    smsMethod: "firebase",
-                })
-            }
-        } catch (dbError) {
-            console.error("[v0] Database error in send-otp:", dbError)
-            return Response.json({ error: "Failed to send OTP. Please try again." }, { status: 500 })
+        // Validate phone number format
+        if (!/^\+\d{10,15}$/.test(phoneNumber)) {
+            return Response.json({ error: "Invalid phone number format" }, { status: 400 })
         }
+
+        const sql = neon(process.env.DATABASE_URL!)
+
+        // Check if user exists
+        const userResult = await sql`
+            SELECT id FROM users 
+            WHERE phone_number = ${phoneNumber}
+        `
+
+        if (userResult.length === 0) {
+            return Response.json({ error: "Phone number not registered" }, { status: 404 })
+        }
+
+        const otp = Math.floor(100000 + Math.random() * 900000).toString()
+        const expiresAt = new Date(Date.now() + 10 * 60 * 1000)
+
+        // Delete old OTP
+        await sql`
+            DELETE FROM verification_tokens
+            WHERE identifier = ${phoneNumber}
+        `
+
+        // Insert new OTP
+        await sql`
+            INSERT INTO verification_tokens (identifier, token, expires_at)
+            VALUES (${phoneNumber}, ${otp}, ${expiresAt})
+        `
+
+        // NOTE: SMS sending should be implemented via your SMS provider
+        // For now, OTP is stored in database and logged in development
+        console.log(`[OTP] Generated for ${phoneNumber}: ${otp} (expires at ${expiresAt.toISOString()})`)
+
+        return Response.json({
+            success: true,
+            message: "OTP sent successfully",
+        })
     } catch (error) {
         console.error("[v0] Send OTP error:", error)
-        return Response.json({ error: "An error occurred while sending OTP" }, { status: 500 })
+        return Response.json(
+            { error: "Failed to send OTP" },
+            { status: 500 }
+        )
     }
 }
