@@ -1,4 +1,5 @@
 import { neon } from "@neondatabase/serverless"
+import { generateMSG91WidgetToken } from "@/src/lib/sms-service"
 
 export async function POST(req: Request) {
     try {
@@ -25,28 +26,20 @@ export async function POST(req: Request) {
             return Response.json({ error: "Phone number not registered" }, { status: 404 })
         }
 
-        const otp = Math.floor(100000 + Math.random() * 900000).toString()
-        const expiresAt = new Date(Date.now() + 10 * 60 * 1000)
+        // Generate MSG91 widget token
+        const tokenResult = await generateMSG91WidgetToken(phoneNumber)
 
-        // Delete old OTP
-        await sql`
-            DELETE FROM verification_tokens
-            WHERE identifier = ${phoneNumber}
-        `
-
-        // Insert new OTP
-        await sql`
-            INSERT INTO verification_tokens (identifier, token, expires_at)
-            VALUES (${phoneNumber}, ${otp}, ${expiresAt})
-        `
-
-        // NOTE: SMS sending should be implemented via your SMS provider
-        // For now, OTP is stored in database and logged in development
-        console.log(`[OTP] Generated for ${phoneNumber}: ${otp} (expires at ${expiresAt.toISOString()})`)
+        if (!tokenResult.success) {
+            return Response.json(
+                { error: tokenResult.error || "Failed to generate OTP widget token" },
+                { status: 500 }
+            )
+        }
 
         return Response.json({
             success: true,
-            message: "OTP sent successfully",
+            token: tokenResult.token,
+            message: "OTP widget ready",
         })
     } catch (error) {
         console.error("[v0] Send OTP error:", error)

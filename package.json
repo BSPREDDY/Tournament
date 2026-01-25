@@ -81,8 +81,6 @@
     "dotenv": "17.2.3",
     "drizzle-orm": "0.45.1",
     "expo-sqlite": "latest",
-    "firebase": "12.7.0",
-    "firebase-admin": "13.6.0",
     "geist": "^1.5.1",
     "i": "^0.3.7",
     "jiti": "latest",
@@ -102,12 +100,12 @@
     "@next/eslint-plugin-next": "16.1.4"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.13",
+    "@tailwindcss/postcss": "^4.1.9",
     "@types/node": "20.10.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "postcss": "8.4.32",
-    "tailwindcss": "3.3.6",
+    "tailwindcss": "^3.4.17",
     "typescript": "5.3.3",
     "@radix-ui/react-context-menu": "2.2.4",
     "@radix-ui/react-dismissable-layer": "1.1.0",

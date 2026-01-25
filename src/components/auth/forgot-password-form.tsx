@@ -1,11 +1,12 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { toast } from "sonner"
 import { ArrowLeft, Loader2 } from "lucide-react"
+import MSG91OTPWidget from "@/src/components/msg91-otp-widget"
 
 interface ForgotPasswordFormProps {
     onClose: () => void
@@ -15,26 +16,14 @@ export default function ForgotPasswordForm({ onClose }: ForgotPasswordFormProps)
     const [step, setStep] = useState<"phone" | "otp" | "password">("phone")
     const [phoneNumber, setPhoneNumber] = useState("")
     const [countryCode, setCountryCode] = useState("+91")
-    const [otp, setOtp] = useState("")
+    const [widgetToken, setWidgetToken] = useState("")
+    const [verifiedPhone, setVerifiedPhone] = useState("")
     const [newPassword, setNewPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [isLoading, setIsLoading] = useState(false)
-    const [countdown, setCountdown] = useState(0)
 
     /* ----------------------------------
-       RESEND COUNTDOWN
-    ----------------------------------- */
-    useEffect(() => {
-        if (countdown <= 0) return
-        const timer = setInterval(() => {
-            setCountdown((c) => c - 1)
-        }, 1000)
-
-        return () => clearInterval(timer)
-    }, [countdown])
-
-    /* ----------------------------------
-       SEND OTP
+       SEND OTP - Generate Widget Token
     ----------------------------------- */
     const handleSendOTP = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -53,7 +42,7 @@ export default function ForgotPasswordForm({ onClose }: ForgotPasswordFormProps)
                 return
             }
 
-            // Send OTP via backend route
+            // Get widget token from backend
             const response = await fetch("/api/auth/forgot-password/send-otp", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -63,92 +52,58 @@ export default function ForgotPasswordForm({ onClose }: ForgotPasswordFormProps)
             const data = await response.json()
 
             if (!response.ok) {
-                toast.error(data.error || "Failed to send OTP")
+                toast.error(data.error || "Failed to initialize OTP")
                 return
             }
 
+            setWidgetToken(data.token)
             setStep("otp")
-            setCountdown(60)
-            toast.success("OTP sent successfully")
+            toast.success("OTP widget ready")
         } catch (err) {
             console.error("[v0] Send OTP error:", err)
-            toast.error("Failed to send OTP")
+            toast.error("Failed to initialize OTP")
         } finally {
             setIsLoading(false)
         }
     }
 
     /* ----------------------------------
-       VERIFY OTP
+       OTP WIDGET SUCCESS
     ----------------------------------- */
-    const handleVerifyOTP = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setIsLoading(true)
-
+    const handleWidgetSuccess = async (data: { token: string; phone: string }) => {
         try {
-            if (otp.length !== 6) {
-                toast.error("Enter valid 6-digit OTP")
-                return
-            }
+            console.log("[v0] Widget returned token:", data.token)
 
-            const fullPhone = `${countryCode}${phoneNumber}`
-
-            // Verify OTP via backend route
+            // Verify the widget token with backend
             const response = await fetch("/api/auth/forgot-password/verify-otp", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ phoneNumber: fullPhone, otp }),
+                body: JSON.stringify({ accessToken: data.token }),
             })
 
-            const data = await response.json()
+            const result = await response.json()
 
             if (!response.ok) {
-                toast.error(data.error || "Invalid OTP")
+                toast.error(result.error || "OTP verification failed")
                 return
             }
 
+            // Store verified phone and move to password reset
+            setVerifiedPhone(result.phone || data.phone)
             setStep("password")
             toast.success("Phone verified successfully")
         } catch (err) {
-            console.error("[v0] Verify OTP error:", err)
-            toast.error("OTP verification failed")
-        } finally {
-            setIsLoading(false)
+            console.error("[v0] Widget verification error:", err)
+            toast.error("Verification failed")
         }
     }
 
     /* ----------------------------------
-       RESEND OTP
+       OTP WIDGET FAILURE
     ----------------------------------- */
-    const handleResendOTP = async () => {
-        if (countdown > 0) return
-
-        setIsLoading(true)
-        try {
-            const fullPhone = `${countryCode}${phoneNumber}`
-
-            const response = await fetch("/api/auth/forgot-password/send-otp", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ phoneNumber: fullPhone }),
-            })
-
-            const data = await response.json()
-
-            if (!response.ok) {
-                toast.error(data.error || "Failed to resend OTP")
-                return
-            }
-
-            setOtp("")
-            setCountdown(60)
-            toast.success("OTP resent")
-        } catch (err) {
-            console.error("[v0] Resend OTP error:", err)
-            toast.error("Failed to resend OTP")
-        } finally {
-            setIsLoading(false)
-        }
+    const handleWidgetFailure = (error: string) => {
+        console.error("[v0] Widget error:", error)
+        toast.error(error || "OTP failed")
     }
 
     /* ----------------------------------
@@ -170,7 +125,7 @@ export default function ForgotPasswordForm({ onClose }: ForgotPasswordFormProps)
         setIsLoading(true)
 
         try {
-            const fullPhone = `${countryCode}${phoneNumber}`
+            const fullPhone = verifiedPhone || `${countryCode}${phoneNumber}`
 
             const response = await fetch("/api/auth/forgot-password/reset", {
                 method: "POST",
@@ -204,7 +159,11 @@ export default function ForgotPasswordForm({ onClose }: ForgotPasswordFormProps)
     return (
         <div className="w-full max-w-md mx-auto">
             <div className="flex items-center gap-3 mb-6">
-                <button onClick={onClose} type="button" className="hover:opacity-70">
+                <button
+                    onClick={onClose}
+                    type="button"
+                    className="hover:opacity-70 transition-opacity"
+                >
                     <ArrowLeft className="w-5 h-5" />
                 </button>
                 <h2 className="text-2xl font-bold">Reset Password</h2>
@@ -243,70 +202,36 @@ export default function ForgotPasswordForm({ onClose }: ForgotPasswordFormProps)
                         {isLoading ? (
                             <>
                                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                Sending...
+                                Initializing...
                             </>
                         ) : (
-                            "Send OTP"
+                            "Get OTP"
                         )}
                     </Button>
                 </form>
             )}
 
-            {step === "otp" && (
-                <form onSubmit={handleVerifyOTP} className="space-y-4">
-                    <div>
-                        <label className="text-sm text-gray-600 mb-2 block">
-                            Enter 6-digit OTP
-                        </label>
-                        <Input
-                            type="text"
-                            inputMode="numeric"
-                            placeholder="000000"
-                            value={otp}
-                            onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                            className="text-center text-2xl tracking-widest font-mono"
-                            maxLength={6}
-                        />
+            {step === "otp" && widgetToken && (
+                <div className="space-y-4">
+                    <div className="text-sm text-gray-600">
+                        Enter the OTP sent to {countryCode}
+                        {phoneNumber}
                     </div>
 
-                    <Button
-                        type="submit"
-                        disabled={isLoading || otp.length !== 6}
-                        className="w-full"
-                    >
-                        {isLoading ? (
-                            <>
-                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                Verifying...
-                            </>
-                        ) : (
-                            "Verify OTP"
-                        )}
-                    </Button>
-
-                    <div className="text-center">
-                        {countdown > 0 ? (
-                            <p className="text-sm text-gray-600">Resend in {countdown}s</p>
-                        ) : (
-                            <button
-                                type="button"
-                                onClick={handleResendOTP}
-                                disabled={isLoading}
-                                className="text-sm text-blue-600 hover:text-blue-700 disabled:text-gray-400"
-                            >
-                                Resend OTP
-                            </button>
-                        )}
-                    </div>
-                </form>
+                    <MSG91OTPWidget
+                        widgetId={process.env.NEXT_PUBLIC_MSG91_WIDGET_ID || ""}
+                        token={widgetToken}
+                        phoneNumber={`${countryCode}${phoneNumber}`}
+                        onSuccess={handleWidgetSuccess}
+                        onFailure={handleWidgetFailure}
+                    />
+                </div>
             )}
 
             {step === "password" && (
                 <form onSubmit={handleResetPassword} className="space-y-4">
                     <div>
-                        <label className="text-sm text-gray-600 mb-2 block">
-                            New Password
-                        </label>
+                        <label className="text-sm text-gray-600 mb-2 block">New Password</label>
                         <Input
                             type="password"
                             placeholder="At least 8 characters"

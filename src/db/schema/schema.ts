@@ -145,6 +145,35 @@ export const RegistrationConfigTable = pgTable("registration_config", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
 
+/* ---------------- BGMI SCHEDULE TABLE ---------------- */
+export const BgmiScheduleTable = pgTable("bgmi_schedule", {
+  id: uuid("id").primaryKey().defaultRandom(),
+
+  date: varchar("date", { length: 50 }).notNull(),
+  time: varchar("time", { length: 500 }).notNull(),
+  maps: varchar("maps", { length: 500 }).notNull(),
+  type: varchar("type", { length: 50 }).notNull(),
+
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
+
+/* ---------------- USER CONTACT FORM TABLE ---------------- */
+export const UserContactFormTable = pgTable("user_contact_forms", {
+  id: uuid("id").primaryKey().defaultRandom(),
+
+  userId: uuid("user_id")
+    .references(() => UserTable.id, { onDelete: "cascade" })
+    .notNull(),
+
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull(),
+  subject: varchar("subject", { length: 500 }).notNull(),
+  message: varchar("message", { length: 5000 }).notNull(),
+
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
 /* ---------------- TYPES ---------------- */
 export type User = typeof UserTable.$inferSelect
 export type FormData = typeof FormDataTable.$inferSelect
@@ -154,6 +183,8 @@ export type PasswordResetToken = typeof PasswordResetTokenTable.$inferSelect
 export type FormConfig = typeof FormConfigTable.$inferSelect
 export type FormStatus = typeof FormStatusTable.$inferSelect
 export type RegistrationConfig = typeof RegistrationConfigTable.$inferSelect
+export type BgmiSchedule = typeof BgmiScheduleTable.$inferSelect
+export type UserContactForm = typeof UserContactFormTable.$inferSelect
 
 /* ---------------- EXPORT SCHEMA ---------------- */
 export const dbSchema = {
@@ -165,4 +196,6 @@ export const dbSchema = {
   formConfig: FormConfigTable,
   formStatus: FormStatusTable,
   registrationConfig: RegistrationConfigTable,
+  bgmiSchedule: BgmiScheduleTable,
+  userContactForms: UserContactFormTable,
 } as const

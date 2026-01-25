@@ -7,14 +7,14 @@ export function Footer() {
     return (
         <footer className="bg-gradient-to-r from-card via-card to-card border-t border-primary/10 mt-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
                     {/* Brand */}
                     <div className="space-y-4">
                         <div className="flex items-center gap-2">
                             <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-lg text-white">
-                                <span className="text-xl font-bold">T</span>
+                                <span className="text-xl font-bold">Nag • IronmanTY</span>
                             </div>
-                            <span className="text-lg font-bold">Tournament</span>
+                            {/* <span className="text-lg font-bold">Tournament</span> */}
                         </div>
                         <p className="text-sm text-muted-foreground">
                             A comprehensive tournament registration and management platform
@@ -36,8 +36,35 @@ export function Footer() {
                                 </Link>
                             </li>
                             <li>
+                                <Link href="/dashboard/schedule" className="hover:text-primary transition-colors">
+                                    Schedule
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/dashboard/registered-teams" className="hover:text-primary transition-colors">
+                                    Registered Teams
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* More Links */}
+                    <div className="space-y-3">
+                        <h3 className="font-semibold text-foreground">Support</h3>
+                        <ul className="space-y-2 text-sm text-muted-foreground">
+                            <li>
                                 <Link href="/dashboard/profile" className="hover:text-primary transition-colors">
-                                    Profile
+                                    My Profile
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/dashboard/security" className="hover:text-primary transition-colors">
+                                    Security
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/contact" className="hover:text-primary transition-colors">
+                                    Contact Support
                                 </Link>
                             </li>
                         </ul>
@@ -45,7 +72,7 @@ export function Footer() {
 
                     {/* Contact Info */}
                     <div className="space-y-3">
-                        <h3 className="font-semibold text-foreground">Contact Us</h3>
+                        <h3 className="font-semibold text-foreground">Contact</h3>
                         <ul className="space-y-2 text-sm text-muted-foreground">
                             <li className="flex items-center gap-2 hover:text-primary transition-colors cursor-pointer">
                                 <Mail className="w-4 h-4" />
@@ -55,18 +82,19 @@ export function Footer() {
                                 <Phone className="w-4 h-4" />
                                 <span>+1 (555) 123-4567</span>
                             </li>
-                            <li className="flex items-center gap-2 hover:text-primary transition-colors cursor-pointer">
+                            {/* <li className="flex items-center gap-2 hover:text-primary transition-colors cursor-pointer">
                                 <MapPin className="w-4 h-4" />
                                 <span>123 Tournament St</span>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
 
+                    {/* Social Links */}
                     <div className="space-y-3">
                         <h3 className="font-semibold text-foreground">Follow Us</h3>
                         <div className="flex gap-4">
                             <a
-                                href="https://instagram.com"
+                                href="https://www.instagram.com/nagironman?igsh=b3NvMmhsdHFkaWVh"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="p-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
@@ -75,7 +103,7 @@ export function Footer() {
                                 <Instagram className="w-5 h-5" />
                             </a>
                             <a
-                                href="https://youtube.com"
+                                href="https://www.youtube.com/@nagironmanyt"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="p-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary transition-colors"

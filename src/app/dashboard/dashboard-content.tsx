@@ -7,6 +7,8 @@ import Link from "next/link"
 import { Trophy } from "lucide-react"
 import { UserNavbar } from "@/src/components/user/navbar"
 import { Footer } from "@/src/components/user/footer"
+import { Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react"
+
 
 interface DashboardContentProps {
   user: User
@@ -179,7 +181,7 @@ export default function DashboardContent({ user }: DashboardContentProps) {
                   rel="noopener noreferrer"
                   className="flex flex-col items-center gap-2 p-3 rounded-xl border bg-gradient-to-br from-pink-50 to-orange-50 dark:from-pink-950 dark:to-orange-950 hover:shadow-lg transition-all duration-200 transform hover:scale-105 text-xs"
                 >
-                  <span className="text-xl">📷</span>
+                  <Instagram className="w-5 h-5" />
                   <span className="font-bold uppercase tracking-widest text-pink-700 dark:text-pink-300">
                     Instagram
                   </span>
@@ -190,7 +192,7 @@ export default function DashboardContent({ user }: DashboardContentProps) {
                   rel="noopener noreferrer"
                   className="flex flex-col items-center gap-2 p-3 rounded-xl border bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950 dark:to-rose-950 hover:shadow-lg transition-all duration-200 transform hover:scale-105 text-xs"
                 >
-                  <span className="text-xl">▶️</span>
+                  <Youtube className="w-5 h-5" />
                   <span className="font-bold uppercase tracking-widest text-red-700 dark:text-red-300">YouTube</span>
                 </a>
               </div>

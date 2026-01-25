@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LogOut, LayoutDashboard, Users, FileText, Settings, Menu, X } from "lucide-react"
+import { LogOut, LayoutDashboard, Users, FileText, Settings, Menu, X, Calendar, Mail } from "lucide-react"
 import { Button } from "@/src/components/ui/button"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
@@ -103,6 +103,8 @@ export function Sidebar() {
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
     { href: "/admin/users", label: "Users", icon: Users },
     { href: "/admin/form-management", label: "Form Management", icon: FileText },
+    { href: "/admin/bgmi-schedule", label: "BGMI Schedule", icon: Calendar },
+    { href: "/admin/user-contact-forms", label: "Contact Forms", icon: Mail },
     { href: "/admin/registration-status", label: "Registration Status", icon: Settings },
   ]
 

@@ -1,87 +1,117 @@
-"use client"
+/**
+ * MSG91 OTP Widget Service
+ * Handles widget token generation and verification
+ */
 
-import app from "./firebase"
-import {
-    getAuth,
-    RecaptchaVerifier,
-    signInWithPhoneNumber,
-    ConfirmationResult,
-} from "firebase/auth"
+/**
+ * Generate access token for MSG91 OTP widget
+ * Token is used to initialize the widget on frontend
+ */
+export async function generateMSG91WidgetToken(phoneNumber: string) {
+    try {
+        const authKey = process.env.MSG91_AUTH_KEY
+        const widgetId = process.env.MSG91_WIDGET_ID
 
-const auth = getAuth(app)
+        if (!authKey || !widgetId) {
+            console.error("[MSG91] Missing MSG91_AUTH_KEY or MSG91_WIDGET_ID")
+            return {
+                success: false,
+                error: "MSG91 widget not configured",
+            }
+        }
 
-declare global {
-    interface Window {
-        recaptchaVerifier?: RecaptchaVerifier
-        confirmationResult?: ConfirmationResult
-    }
-}
+        // Remove '+' from phone number if present
+        const cleanPhone = phoneNumber.startsWith("+") ? phoneNumber.slice(1) : phoneNumber
 
-class FirebaseSMSService {
-    private recaptcha: RecaptchaVerifier | null = null
+        // Generate token via MSG91 API
+        const url = "https://control.msg91.com/api/v5/widget/generateAccessToken"
 
-    setupRecaptcha(containerId = "recaptcha-container") {
-        if (this.recaptcha) return
-
-        this.recaptcha = new RecaptchaVerifier(auth, containerId, {
-            size: "invisible",
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: JSON.stringify({
+                authkey: authKey,
+                identifier: cleanPhone,
+            }),
         })
 
-        window.recaptchaVerifier = this.recaptcha
-    }
+        const data = await response.json()
 
-    async sendOTP(phoneNumber: string) {
-        try {
-            if (!phoneNumber.startsWith("+")) {
-                throw new Error("Phone number must include country code")
-            }
-
-            this.setupRecaptcha()
-
-            const confirmation = await signInWithPhoneNumber(
-                auth,
-                phoneNumber,
-                window.recaptchaVerifier!
-            )
-
-            window.confirmationResult = confirmation
-
-            return { success: true }
-        } catch (error: any) {
-            console.error("[Firebase SMS]", error)
-            return {
-                success: false,
-                error: error.message || "Failed to send OTP",
-            }
-        }
-    }
-
-    async verifyOTP(code: string) {
-        try {
-            const confirmation = window.confirmationResult
-            if (!confirmation) throw new Error("OTP not sent")
-
-            const result = await confirmation.confirm(code)
-
+        if (response.ok && data.type === "success") {
+            console.log(`[MSG91] Widget token generated for ${phoneNumber}`)
             return {
                 success: true,
-                uid: result.user.uid,
-                phoneNumber: result.user.phoneNumber,
-            }
-        } catch (error: any) {
-            return {
-                success: false,
-                error: "Invalid or expired OTP",
+                token: data.token,
             }
         }
-    }
 
-    cleanup() {
-        this.recaptcha?.clear()
-        this.recaptcha = null
-        window.recaptchaVerifier = undefined
-        window.confirmationResult = undefined
+        console.error("[MSG91] Failed to generate widget token:", data)
+        return {
+            success: false,
+            error: data.message || "Failed to generate widget token",
+        }
+    } catch (error) {
+        console.error("[MSG91] Error generating widget token:", error)
+        return {
+            success: false,
+            error: "Failed to generate widget token",
+        }
     }
 }
 
-export const firebaseSMS = new FirebaseSMSService()
+/**
+ * Verify access token from MSG91 OTP widget
+ * Called after user enters OTP in widget
+ */
+export async function verifyMSG91WidgetToken(accessToken: string) {
+    try {
+        const authKey = process.env.MSG91_AUTH_KEY
+
+        if (!authKey) {
+            console.error("[MSG91] Missing MSG91_AUTH_KEY")
+            return {
+                success: false,
+                error: "MSG91 not configured",
+            }
+        }
+
+        const url = "https://control.msg91.com/api/v5/widget/verifyAccessToken"
+
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: JSON.stringify({
+                authkey: authKey,
+                "access-token": accessToken,
+            }),
+        })
+
+        const data = await response.json()
+
+        if (response.ok && data.type === "success") {
+            console.log("[MSG91] Widget token verified successfully")
+            return {
+                success: true,
+                phone: data.phone || data.identifier,
+            }
+        }
+
+        console.error("[MSG91] Failed to verify widget token:", data)
+        return {
+            success: false,
+            error: data.message || "Failed to verify OTP",
+        }
+    } catch (error) {
+        console.error("[MSG91] Error verifying widget token:", error)
+        return {
+            success: false,
+            error: "Failed to verify OTP",
+        }
+    }
+}

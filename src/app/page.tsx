@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Button } from "@/src/components/ui/button"
 import { Trophy, Users, Lock, ArrowRight } from "lucide-react"
 
-export default function HomePage() {
+export default function Page() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       {/* Navigation */}
@@ -16,6 +16,11 @@ export default function HomePage() {
               <h1 className="text-xl font-bold gradient-text">Nag <strong>•</strong> IronmanTY</h1>
             </div>
             <div className="flex items-center space-x-4">
+              <Link href="/contact">
+                <Button variant="ghost" className="hover:bg-primary/10">
+                  Contact
+                </Button>
+              </Link>
               <Link href="/auth/login">
                 <Button variant="ghost" className="hover:bg-primary/10">
                   Login

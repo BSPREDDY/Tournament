@@ -12,7 +12,7 @@ import {
     DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
-import { X, UserCircle, Lock, LayoutDashboard, LogOut } from "lucide-react"
+import { X, Menu, UserCircle, Lock, LayoutDashboard, LogOut } from "lucide-react"
 import type { User } from "@/src/db/schema/schema"
 
 interface UserNavbarProps {
@@ -44,9 +44,9 @@ export function UserNavbar({ user }: UserNavbarProps) {
                     {/* Logo */}
                     <div className="flex items-center gap-2 flex-shrink-0">
                         <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-lg text-white">
-                            <span className="text-xl font-bold">T</span>
+                            <span className="text-xl font-bold">Nag • IronmanTY</span>
                         </div>
-                        <h1 className="text-lg sm:text-xl font-bold hidden sm:block">Tournament</h1>
+                        {/* <h1 className="text-lg sm:text-xl font-bold hidden sm:block">Tournament</h1> */}
                     </div>
 
                     {/* Desktop Navigation */}
@@ -61,15 +61,31 @@ export function UserNavbar({ user }: UserNavbarProps) {
                                 Register
                             </Button>
                         </Link>
+                        <Link href="/dashboard/schedule">
+                            <Button variant="ghost" className="text-sm">
+                                Schedule
+                            </Button>
+                        </Link>
+                        <Link href="/dashboard/registered-teams">
+                            <Button variant="ghost" className="text-sm">
+                                Registered Teams
+                            </Button>
+                        </Link>
+                        <Link href="/dashboard/contact">
+                            <Button variant="ghost" className="text-sm">
+                                Contact
+                            </Button>
+                        </Link>
                     </div>
 
-                    {/* Mobile Menu Button - Removed lucide-menu SVG, using only X icon */}
+                    {/* Mobile Menu Button */}
                     <div className="md:hidden flex items-center gap-2">
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                             className="p-2 rounded-md hover:bg-primary/10 transition-colors"
+                            aria-label="Toggle menu"
                         >
-                            {mobileMenuOpen && <X className="w-5 h-5" />}
+                            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                         </button>
                     </div>
 
@@ -147,6 +163,21 @@ export function UserNavbar({ user }: UserNavbarProps) {
                             <Link href="/form">
                                 <Button variant="ghost" className="w-full justify-start">
                                     Register
+                                </Button>
+                            </Link>
+                            <Link href="/dashboard/schedule">
+                                <Button variant="ghost" className="w-full justify-start">
+                                    Schedule
+                                </Button>
+                            </Link>
+                            <Link href="/dashboard/registered-teams">
+                                <Button variant="ghost" className="w-full justify-start">
+                                    Registered Teams
+                                </Button>
+                            </Link>
+                            <Link href="/dashboard/contact">
+                                <Button variant="ghost" className="w-full justify-start">
+                                    Contact
                                 </Button>
                             </Link>
                             <Link href="/dashboard/profile">
