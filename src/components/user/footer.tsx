@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react"
+import { Instagram, Youtube, Mail, Phone } from "lucide-react"
 
 export function Footer() {
     return (
@@ -31,7 +31,7 @@ export function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/form" className="hover:text-primary transition-colors">
+                                <Link href="/dashboard/form" className="hover:text-primary transition-colors">
                                     Register
                                 </Link>
                             </li>
@@ -63,7 +63,7 @@ export function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/contact" className="hover:text-primary transition-colors">
+                                <Link href="/dashboard/contact" className="hover:text-primary transition-colors">
                                     Contact Support
                                 </Link>
                             </li>
@@ -82,10 +82,6 @@ export function Footer() {
                                 <Phone className="w-4 h-4" />
                                 <span>+1 (555) 123-4567</span>
                             </li>
-                            {/* <li className="flex items-center gap-2 hover:text-primary transition-colors cursor-pointer">
-                                <MapPin className="w-4 h-4" />
-                                <span>123 Tournament St</span>
-                            </li> */}
                         </ul>
                     </div>
 

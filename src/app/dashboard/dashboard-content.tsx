@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import type { User } from "@/src/db/schema/schema"
 import { Button } from "@/src/components/ui/button"
 import Link from "next/link"
-import { Trophy } from "lucide-react"
+import { Instagram, Trophy, Youtube } from "lucide-react"
 
 interface DashboardContentProps {
   user: User
@@ -49,7 +49,7 @@ export default function DashboardContent({ user }: DashboardContentProps) {
                 <p className="text-xs sm:text-sm text-muted-foreground mt-1">Manage your team entry and status</p>
               </div>
               {!formData && (
-                <Link href="/form" className="w-full sm:w-auto">
+                <Link href="/dashboard/form" className="w-full sm:w-auto">
                   <Button className="shadow-lg bg-gradient-to-r from-primary to-secondary hover:shadow-xl transition-shadow w-full sm:w-auto">
                     Register Team
                   </Button>
@@ -124,7 +124,7 @@ export default function DashboardContent({ user }: DashboardContentProps) {
                 <p className="text-xs sm:text-sm text-muted-foreground mb-6 px-4">
                   Ready to compete? Start by registering your squad.
                 </p>
-                <Link href="/form">
+                <Link href="/dashboard/form">
                   <Button
                     variant="outline"
                     className="hover:bg-primary/5 bg-transparent text-sm w-full sm:w-auto px-4"
@@ -174,7 +174,8 @@ export default function DashboardContent({ user }: DashboardContentProps) {
                 rel="noopener noreferrer"
                 className="flex flex-col items-center gap-2 p-3 rounded-xl border bg-gradient-to-br from-pink-50 to-orange-50 dark:from-pink-950 dark:to-orange-950 hover:shadow-lg transition-all duration-200 transform hover:scale-105 text-xs"
               >
-                <span className="text-xl">📷</span>
+                <Instagram className="w-5 h-5" />
+
                 <span className="font-bold uppercase tracking-widest text-pink-700 dark:text-pink-300">
                   Instagram
                 </span>
@@ -185,7 +186,7 @@ export default function DashboardContent({ user }: DashboardContentProps) {
                 rel="noopener noreferrer"
                 className="flex flex-col items-center gap-2 p-3 rounded-xl border bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950 dark:to-rose-950 hover:shadow-lg transition-all duration-200 transform hover:scale-105 text-xs"
               >
-                <span className="text-xl">▶️</span>
+                <Youtube className="w-5 h-5" />
                 <span className="font-bold uppercase tracking-widest text-red-700 dark:text-red-300">YouTube</span>
               </a>
             </div>

@@ -21,6 +21,7 @@ import {
     Lock,
     Shield,
     LogOut,
+    Trophy,
 } from "lucide-react"
 import type { User } from "@/src/db/schema/schema"
 
@@ -51,19 +52,12 @@ export function UserNavbar({ user }: UserNavbarProps) {
 
                     {/* Logo */}
                     <Link href="/dashboard" className="flex items-center gap-2 sm:gap-3 group flex-shrink-0">
-                        <div
-                            className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-gradient-to-br from-primary to-secondary
-              text-white shadow-md group-hover:shadow-primary/40 transition-all flex-shrink-0"
-                        >
-                            <span className="text-lg sm:text-xl">🏆</span>
+                        <div className="flex items-center gap-2">
+                            <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-lg text-white">
+                                <Trophy className="w-6 h-6" />
+                            </div>
+                            <h1 className="text-xl font-bold gradient-text">Nag • IronmanTY</h1>
                         </div>
-                        <h1
-                            className="hidden sm:block text-base sm:text-lg font-extrabold tracking-tight
-              bg-gradient-to-r from-primary to-secondary
-              bg-clip-text text-transparent"
-                        >
-                            Nag • IronmanTY
-                        </h1>
                     </Link>
 
                     {/* Desktop Navigation */}

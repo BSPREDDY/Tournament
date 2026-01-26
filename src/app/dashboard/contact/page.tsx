@@ -96,7 +96,7 @@ export default function ContactPage() {
         return (
             <div className="min-h-screen pt-20 pb-12">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center">
+                    <div className="text-center pt-28">
                         <p className="text-muted-foreground">Loading...</p>
                     </div>
                 </div>

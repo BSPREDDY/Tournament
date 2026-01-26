@@ -1,10 +1,14 @@
 import { db } from "@/src/lib/db"
-import { RegistrationConfigTable } from "@/src/db/schema/schema"
+import { RegistrationConfigTable, FormDataTable } from "@/src/db/schema/schema"
 import { eq } from "drizzle-orm"
 
 export async function GET() {
     try {
         const configs = await db.select().from(RegistrationConfigTable).orderBy(RegistrationConfigTable.updatedAt).limit(1)
+
+        // Get current team count
+        const teamCountResult = await db.select().from(FormDataTable)
+        const currentTeams = teamCountResult.length
 
         if (configs.length === 0) {
             // Create default config if none exists
@@ -16,10 +20,10 @@ export async function GET() {
                 })
                 .returning()
 
-            return Response.json(newConfig[0], { status: 201 })
+            return Response.json({ ...newConfig[0], currentTeams }, { status: 201 })
         }
 
-        return Response.json(configs[0], { status: 200 })
+        return Response.json({ ...configs[0], currentTeams }, { status: 200 })
     } catch (error) {
         console.error("[v0] Get registration config error:", error)
         return Response.json({ error: "Failed to fetch registration config" }, { status: 500 })
@@ -35,7 +39,7 @@ export async function PATCH(req: Request) {
             return Response.json({ error: "Invalid request body" }, { status: 400 })
         }
 
-        const { registrationStopAt, isRegistrationOpen } = body
+        const { registrationStopAt, isRegistrationOpen, maxTeams } = body
 
         let stopAtDate: Date | null | undefined = undefined
         if (registrationStopAt !== undefined) {
@@ -67,10 +71,15 @@ export async function PATCH(req: Request) {
                 .values({
                     isRegistrationOpen: isRegistrationOpen !== undefined ? isRegistrationOpen : true,
                     registrationStopAt: stopAtDate !== undefined ? stopAtDate : null,
+                    maxTeams: maxTeams || null,
                 })
                 .returning()
 
-            return Response.json(newConfig[0], { status: 201 })
+            // Get current team count
+            const teamCountResult = await db.select().from(FormDataTable)
+            const currentTeams = teamCountResult.length
+
+            return Response.json({ ...newConfig[0], currentTeams }, { status: 201 })
         }
 
         const updateData: Record<string, any> = {}
@@ -80,10 +89,17 @@ export async function PATCH(req: Request) {
         if (stopAtDate !== undefined) {
             updateData.registrationStopAt = stopAtDate
         }
+        if (maxTeams !== undefined) {
+            updateData.maxTeams = maxTeams
+        }
 
         // Only update if there are fields to update
         if (Object.keys(updateData).length === 0) {
-            return Response.json(configs[0], { status: 200 })
+            // Get current team count
+            const teamCountResult = await db.select().from(FormDataTable)
+            const currentTeams = teamCountResult.length
+
+            return Response.json({ ...configs[0], currentTeams }, { status: 200 })
         }
 
         const updatedConfig = await db
@@ -92,7 +108,23 @@ export async function PATCH(req: Request) {
             .where(eq(RegistrationConfigTable.id, configs[0].id))
             .returning()
 
-        return Response.json(updatedConfig[0], { status: 200 })
+        // Get current team count
+        const teamCountResult = await db.select().from(FormDataTable)
+        const currentTeams = teamCountResult.length
+
+        // Auto-close registration if max teams reached
+        if (maxTeams && currentTeams >= parseInt(maxTeams)) {
+            if (updatedConfig[0].isRegistrationOpen) {
+                await db
+                    .update(RegistrationConfigTable)
+                    .set({ isRegistrationOpen: false })
+                    .where(eq(RegistrationConfigTable.id, configs[0].id))
+                    .returning()
+                updatedConfig[0].isRegistrationOpen = false
+            }
+        }
+
+        return Response.json({ ...updatedConfig[0], currentTeams }, { status: 200 })
     } catch (error) {
         console.error("[v0] Update registration config error:", error)
         return Response.json({ error: "Failed to update registration config" }, { status: 500 })

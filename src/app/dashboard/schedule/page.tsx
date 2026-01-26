@@ -45,19 +45,19 @@ export default function SchedulePage() {
     if (isLoading || !user) {
         return (
             <div className="min-h-screen pt-20 pb-12">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="space-y-6">
                         <div>
                             <h1 className="text-3xl font-bold">BGMI Schedule</h1>
                             <p className="text-muted-foreground mt-1">View tournament schedules</p>
                         </div>
-                        <Card>
-                            <CardContent className="pt-6">
-                                <p className="text-center text-muted-foreground">Loading schedules...</p>
-                            </CardContent>
-                        </Card>
+                        <Card>*/}
+                <CardContent className="pt-28">
+                    <p className="text-center text-muted-foreground">Loading schedules...</p>
+                </CardContent>
+                {/* </Card>
                     </div>
-                </div>
+                </div> */}
             </div>
         )
     }

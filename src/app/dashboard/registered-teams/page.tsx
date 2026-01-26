@@ -10,6 +10,9 @@ import type { FormData, User } from "@/src/db/schema/schema"
 
 interface TeamWithUser extends FormData {
     user?: User
+    slot?: number
+    matchNumber?: number
+    positionInMatch?: number
 }
 // Player field keys from FormData
 export type PlayerKey =
@@ -30,6 +33,7 @@ export default function RegisteredTeamsPage() {
     const [isLoading, setIsLoading] = useState(true)
     const [user, setUser] = useState<User | null>(null)
     const [showSlotsAlert, setShowSlotsAlert] = useState(true)
+    const [totalMatches, setTotalMatches] = useState(0)
 
     useEffect(() => {
         const fetchUserAndTeams = async () => {
@@ -46,9 +50,12 @@ export default function RegisteredTeamsPage() {
                 const response = await fetch("/api/teams")
                 if (response.ok) {
                     const data = await response.json()
-                    console.log("[v0] Teams fetched successfully:", data?.length || 0)
+                    console.log("[v0] Teams fetched successfully:", data?.teams?.length || 0)
+                    // Use teams array from API response
+                    const fetchedTeams = data.teams || data
+                    setTotalMatches(data.totalMatches || Math.ceil(fetchedTeams.length / 24))
                     // Sort by team name
-                    const sortedTeams = data.sort((a: FormData, b: FormData) => {
+                    const sortedTeams = fetchedTeams.sort((a: TeamWithUser, b: TeamWithUser) => {
                         return a.teamName.localeCompare(b.teamName)
                     })
                     setTeams(sortedTeams)
@@ -161,7 +168,7 @@ export default function RegisteredTeamsPage() {
                         </div>
 
                         {/* Stats */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
                             <Card className="border-primary/10 bg-gradient-to-br from-primary/5 to-transparent">
                                 <CardContent className="pt-6">
                                     <div className="flex items-center justify-between">
@@ -195,6 +202,17 @@ export default function RegisteredTeamsPage() {
                                     </div>
                                 </CardContent>
                             </Card>
+                            <Card className="border-primary/10 bg-gradient-to-br from-purple-500/5 to-transparent">
+                                <CardContent className="pt-6">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <p className="text-sm text-muted-foreground">Total Matches</p>
+                                            <p className="text-3xl font-bold text-purple-600">{totalMatches}</p>
+                                        </div>
+                                        <Trophy className="w-8 h-8 text-purple-500/50" />
+                                    </div>
+                                </CardContent>
+                            </Card>
                         </div>
 
                         {/* Teams Table View */}
@@ -210,39 +228,48 @@ export default function RegisteredTeamsPage() {
                                                 <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-foreground">No.</th>
                                                 <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-foreground">Team Name</th>
                                                 <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-foreground hidden sm:table-cell">IGL Name</th>
-                                                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-foreground">Slots</th>
+                                                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-foreground">Match</th>
+                                                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-foreground">Slot</th>
+                                                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-foreground">Players</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-primary/10">
-                                            {teams.map((team, index) => (
-                                                <tr
-                                                    key={team.id}
-                                                    className="hover:bg-primary/5 transition-colors group cursor-pointer"
-                                                >
-                                                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-medium text-foreground">{index + 1}</td>
-                                                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-foreground font-medium group-hover:text-primary transition-colors">
-                                                        <div className="flex flex-col">
-                                                            <span>{team.teamName}</span>
-                                                            <span className="sm:hidden text-muted-foreground text-xs">IGL: {team.iglName}</span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="hidden sm:table-cell px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-foreground flex items-center gap-2">
-                                                        <Gamepad2 className="w-3 h-3 sm:w-4 sm:h-4 text-primary/60 flex-shrink-0" />
-                                                        <span className="truncate">{team.iglName}</span>
-                                                    </td>
-                                                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
-                                                        <button
-                                                            onClick={() => {
-                                                                const players = [team.player1, team.player2, team.player3, team.player4].filter(Boolean).length
-                                                                alert(`${team.teamName} has ${players} players registered.\n\nPlayer Slots: ${players}/4`)
-                                                            }}
-                                                            className="px-2 sm:px-3 py-1 bg-primary/10 text-primary hover:bg-primary/20 rounded-md transition-colors text-xs font-medium whitespace-nowrap"
-                                                        >
-                                                            View Slots
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            ))}
+                                            {teams.map((team, index) => {
+                                                const players = [team.player1, team.player2, team.player3, team.player4].filter(Boolean).length
+                                                return (
+                                                    <tr
+                                                        key={team.id}
+                                                        className="hover:bg-primary/5 transition-colors group cursor-pointer"
+                                                    >
+                                                        <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-medium text-foreground">{index + 1}</td>
+                                                        <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-foreground font-medium group-hover:text-primary transition-colors">
+                                                            <div className="flex flex-col">
+                                                                <span>{team.teamName}</span>
+                                                                <span className="sm:hidden text-muted-foreground text-xs">IGL: {team.iglName}</span>
+                                                            </div>
+                                                        </td>
+                                                        <td className="hidden sm:table-cell px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-foreground flex items-center gap-2">
+                                                            <Gamepad2 className="w-3 h-3 sm:w-4 sm:h-4 text-primary/60 flex-shrink-0" />
+                                                            <span className="truncate">{team.iglName}</span>
+                                                        </td>
+                                                        <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-medium">
+                                                            <span className="inline-block px-2 py-1 bg-purple-500/10 text-purple-700 dark:text-purple-300 rounded text-xs font-semibold">
+                                                                Match {team.matchNumber}
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-medium">
+                                                            <span className="inline-block px-2 py-1 bg-blue-500/10 text-blue-700 dark:text-blue-300 rounded text-xs font-semibold">
+                                                                Slot {team.positionInMatch}/24
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
+                                                            <span className={`inline-block px-2 py-1 rounded text-xs font-semibold ${players === 4 ? 'bg-green-500/10 text-green-700 dark:text-green-300' : 'bg-yellow-500/10 text-yellow-700 dark:text-yellow-300'}`}>
+                                                                {players}/4
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })}
                                         </tbody>
                                     </table>
                                 </div>

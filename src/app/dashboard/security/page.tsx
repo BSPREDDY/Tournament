@@ -53,7 +53,7 @@ export default function SecurityPage() {
 
     if (loading)
         return (
-            <div className="flex flex-col min-h-screen bg-background pt-20">
+            <div className="flex flex-col min-h-screen bg-background pt-36">
                 <div className="text-center py-8 flex-1">
                     <div className="animate-spin rounded-full h-8 w-8 border-4 border-primary/30 border-t-primary mx-auto"></div>
                 </div>
@@ -63,7 +63,7 @@ export default function SecurityPage() {
     return (
         <div className="flex flex-col min-h-screen bg-background">
 
-            <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8 mt-20 flex-1">
+            <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8 flex-1">
                 <div className="space-y-6">
                     {/* Header */}
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -117,112 +117,6 @@ export default function SecurityPage() {
                                         Contains numbers or special characters
                                     </li>
                                 </ul>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Two-Factor Authentication Card */}
-                    <Card className="card-glow w-full">
-                        <CardHeader className="px-4 sm:px-6">
-                            <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
-                                <Shield className="w-5 h-5 text-primary" />
-                                Two-Factor Authentication
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4 px-4 sm:px-6">
-                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-lg bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-900 gap-4">
-                                <div className="flex-1">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <AlertCircle className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-                                        <p className="font-semibold text-sm sm:text-base">Not Enabled</p>
-                                    </div>
-                                    <p className="text-sm text-muted-foreground">Add an extra layer of security to your account</p>
-                                </div>
-                                <Button disabled className="w-full sm:w-auto text-xs sm:text-sm">
-                                    Enable 2FA
-                                </Button>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Active Sessions Card */}
-                    <Card className="card-glow w-full">
-                        <CardHeader className="px-4 sm:px-6">
-                            <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
-                                <LogOut className="w-5 h-5 text-primary" />
-                                Active Sessions
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4 px-4 sm:px-6">
-                            {sessions.length > 0 ? (
-                                <>
-                                    <div className="space-y-3">
-                                        {sessions.map((session) => (
-                                            <div
-                                                key={session.id}
-                                                className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-lg border border-primary/10 bg-primary/5 gap-3"
-                                            >
-                                                <div className="flex-1">
-                                                    <div className="flex items-center gap-2 mb-2">
-                                                        <p className="font-semibold text-sm sm:text-base">{session.device}</p>
-                                                        {session.isCurrent && (
-                                                            <Badge className="text-xs bg-green-600 hover:bg-green-700">Current</Badge>
-                                                        )}
-                                                    </div>
-                                                    <p className="text-sm text-muted-foreground">{session.location}</p>
-                                                    <p className="text-xs text-muted-foreground">
-                                                        Last active: {new Date(session.lastActive).toLocaleDateString()}
-                                                    </p>
-                                                </div>
-                                                {session.isCurrent && (
-                                                    <Badge variant="outline" className="text-xs w-full sm:w-auto justify-center sm:justify-start">
-                                                        Active now
-                                                    </Badge>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <Button variant="destructive" className="w-full mt-4" onClick={handleLogoutAllSessions}>
-                                        Logout From All Sessions
-                                    </Button>
-                                </>
-                            ) : (
-                                <p className="text-muted-foreground text-center py-8">No active sessions</p>
-                            )}
-                        </CardContent>
-                    </Card>
-
-                    {/* Account Activity Card */}
-                    <Card className="card-glow w-full">
-                        <CardHeader className="px-4 sm:px-6">
-                            <CardTitle className="text-lg sm:text-xl">Account Activity</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4 px-4 sm:px-6">
-                            <div className="space-y-3">
-                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-lg bg-card border border-border gap-3">
-                                    <div className="flex-1">
-                                        <p className="font-medium text-sm sm:text-base">Account Created</p>
-                                        <p className="text-xs sm:text-sm text-muted-foreground">
-                                            {new Date(user?.createdAt || Date.now()).toLocaleDateString("en-US", {
-                                                year: "numeric",
-                                                month: "long",
-                                                day: "numeric",
-                                            })}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-lg bg-card border border-border gap-3">
-                                    <div className="flex-1">
-                                        <p className="font-medium text-sm sm:text-base">Last Password Change</p>
-                                        <p className="text-xs sm:text-sm text-muted-foreground">
-                                            {new Date().toLocaleDateString("en-US", {
-                                                year: "numeric",
-                                                month: "long",
-                                                day: "numeric",
-                                            })}
-                                        </p>
-                                    </div>
-                                </div>
                             </div>
                         </CardContent>
                     </Card>

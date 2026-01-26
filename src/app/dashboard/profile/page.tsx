@@ -74,7 +74,7 @@ export default function ProfilePage() {
 
     if (loading)
         return (
-            <div className="flex flex-col min-h-screen bg-background pt-20">
+            <div className="flex flex-col min-h-screen bg-background pt-36">
                 <div className="text-center py-8 flex-1">
                     <div className="animate-spin rounded-full h-8 w-8 border-4 border-primary/30 border-t-primary mx-auto"></div>
                 </div>
@@ -84,7 +84,7 @@ export default function ProfilePage() {
     return (
         <div className="flex flex-col min-h-screen bg-background">
 
-            <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8 mt-20 flex-1">
+            <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8 flex-1">
                 <div className="space-y-6">
                     {/* Header */}
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">

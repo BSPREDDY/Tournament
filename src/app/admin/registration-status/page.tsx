@@ -7,13 +7,14 @@ import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Label } from "@/src/components/ui/label"
 import { toast } from "sonner"
-import { Clock, Calendar, CheckCircle, XCircle, Save, Loader2, Trophy as TrophyIcon } from "lucide-react"
+import { Clock, Calendar, CheckCircle, XCircle, Save, Loader2, Trophy as TrophyIcon, Trophy } from "lucide-react"
 
 interface RegistrationConfig {
     id: string
     registrationStopAt: string | null
     isRegistrationOpen: boolean
-    maxTeams: string
+    maxTeams: string | null
+    currentTeams?: number
 }
 
 export default function RegistrationStatusPage() {
@@ -179,7 +180,7 @@ export default function RegistrationStatusPage() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
                         {/* Status Indicator */}
                         <div className={`flex flex-col gap-4 p-4 sm:p-6 rounded-lg border ${config?.isRegistrationOpen ? 'bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/20' : 'bg-gradient-to-br from-red-500/10 to-orange-500/10 border-red-500/20'}`}>
                             <div className="flex-1">
@@ -206,6 +207,27 @@ export default function RegistrationStatusPage() {
                             >
                                 {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : "Toggle Status"}
                             </Button>
+                        </div>
+
+                        {/* Teams Count */}
+                        <div className="flex flex-col gap-4 p-4 sm:p-6 rounded-lg bg-gradient-to-br from-accent/10 to-secondary/10 border border-accent/20">
+                            <div className="flex items-start gap-3 sm:gap-4">
+                                <TrophyIcon className="w-5 h-5 sm:w-6 sm:h-6 text-accent flex-shrink-0 mt-0.5" />
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-xs sm:text-sm text-muted-foreground mb-1">Teams Registered</p>
+                                    <p className="font-semibold text-sm sm:text-lg break-words">
+                                        {config?.currentTeams || 0} {config?.maxTeams ? `/ ${config.maxTeams}` : ''}
+                                    </p>
+                                    {config?.maxTeams && (
+                                        <div className="w-full bg-muted rounded-full h-2 mt-2">
+                                            <div
+                                                className="bg-accent h-2 rounded-full transition-all duration-300"
+                                                style={{ width: `${Math.min((config.currentTeams || 0) / parseInt(config.maxTeams) * 100, 100)}%` }}
+                                            ></div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
                         </div>
 
                         {/* Deadline Info */}
@@ -302,10 +324,20 @@ export default function RegistrationStatusPage() {
                             )}
                         </div>
 
-                        <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 sm:p-4">
-                            <p className="text-xs sm:text-sm text-muted-foreground">
-                                <strong>Note:</strong> Existing team registrations will not be affected. This limit applies to new registrations only.
-                            </p>
+                        <div className="space-y-3 sm:space-y-4">
+                            <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3 sm:p-4">
+                                <p className="text-xs sm:text-sm text-blue-700 dark:text-blue-300 font-medium mb-2">
+                                    <strong>Auto-Close Feature:</strong>
+                                </p>
+                                <p className="text-xs sm:text-sm text-muted-foreground">
+                                    When the number of registered teams reaches the maximum allowed, registration will <strong>automatically close</strong>. Users won't be able to submit new registrations after this limit is reached.
+                                </p>
+                            </div>
+                            <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 sm:p-4">
+                                <p className="text-xs sm:text-sm text-muted-foreground">
+                                    <strong>Note:</strong> You can still manually toggle registration status using the button above, regardless of whether the max teams limit is reached.
+                                </p>
+                            </div>
                         </div>
 
                         <Button

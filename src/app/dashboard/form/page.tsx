@@ -18,7 +18,10 @@ export default function FormPage() {
   const [dynamicFields, setDynamicFields] = useState<any[]>([])
   const [registrationClosed, setRegistrationClosed] = useState(false)
   const [registrationDeadline, setRegistrationDeadline] = useState<string | null>(null)
+  const [closureReason, setClosureReason] = useState<string | null>(null)
   const [user, setUser] = useState<User | null>(null)
+  const [maxTeams, setMaxTeams] = useState<number | null>(null)
+  const [currentTeams, setCurrentTeams] = useState<number>(0)
   const [formData, setFormData] = useState<any>({
     teamName: "",
     iglName: "",
@@ -50,12 +53,25 @@ export default function FormPage() {
         const configRes = await fetch("/api/admin/registration-config")
         if (configRes.ok) {
           const config = await configRes.json()
+          setCurrentTeams(config.currentTeams || 0)
+
+          if (config.maxTeams) {
+            const maxTeamsNum = parseInt(config.maxTeams, 10)
+            setMaxTeams(maxTeamsNum)
+            if (config.currentTeams >= maxTeamsNum) {
+              setRegistrationClosed(true)
+              setClosureReason("Maximum teams allowed has been reached")
+              toast.error("Maximum teams allowed has been reached. Registration is now closed.")
+              return
+            }
+          }
 
           if (config.registrationStopAt) {
             const deadline = new Date(config.registrationStopAt)
             const now = new Date()
             if (deadline <= now) {
               setRegistrationClosed(true)
+              setClosureReason("Registration deadline has passed")
               toast.error("Registration deadline has passed. Registrations are closed.")
               return
             }
@@ -64,6 +80,7 @@ export default function FormPage() {
 
           if (!config.isRegistrationOpen) {
             setRegistrationClosed(true)
+            setClosureReason("Registration is closed by administrator")
             toast.error("Registration is currently closed by administrator")
             return
           }
@@ -123,13 +140,26 @@ export default function FormPage() {
   if (registrationClosed) {
     return (
       <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
-        <div className="pt-20 sm:pt-24 md:pt-28 flex-1 flex items-center justify-center px-4">
-          <div className="max-w-md w-full text-center">
-            <h1 className="text-2xl sm:text-3xl font-bold text-destructive mb-4">Registration Closed</h1>
-            <p className="text-xs sm:text-sm text-muted-foreground mb-6">Registration for this tournament is currently closed</p>
-            <Link href="/dashboard">
-              <Button className="bg-gradient-to-r from-primary to-secondary text-white w-full sm:w-auto">Return to Dashboard</Button>
-            </Link>
+        <div className="pt-20 sm:pt-24 md:pt-28 py-6 sm:py-8 md:py-12 flex-1 flex items-center justify-center">
+          <div className="max-w-md mx-auto px-3 sm:px-4">
+            <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-6 sm:p-8 text-center space-y-4">
+              <h1 className="text-2xl sm:text-3xl font-bold text-red-500">Registration Closed</h1>
+              <p className="text-sm sm:text-base text-muted-foreground">
+                {closureReason || "Registrations for the tournament are currently closed."}
+              </p>
+              {maxTeams && currentTeams && (
+                <div className="bg-white/50 dark:bg-black/20 rounded-lg p-3 my-4">
+                  <p className="text-xs sm:text-sm font-semibold text-foreground">Teams Capacity</p>
+                  <p className="text-lg sm:text-xl font-bold text-primary mt-1">{currentTeams} / {maxTeams}</p>
+                </div>
+              )}
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                Please contact the administrator for more information.
+              </p>
+              <Link href="/dashboard">
+                <Button className="w-full mt-4">Go Back to Dashboard</Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
