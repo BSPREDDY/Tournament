@@ -43,6 +43,13 @@
       "when": 1769365835919,
       "tag": "0005_furry_abomination",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1769425591072,
+      "tag": "0006_kind_karen_page",
+      "breakpoints": true
     }
   ]
 }

@@ -7,12 +7,13 @@ import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Label } from "@/src/components/ui/label"
 import { toast } from "sonner"
-import { Clock, Calendar, CheckCircle, XCircle, Save, Loader2 } from "lucide-react"
+import { Clock, Calendar, CheckCircle, XCircle, Save, Loader2, Trophy as TrophyIcon } from "lucide-react"
 
 interface RegistrationConfig {
     id: string
     registrationStopAt: string | null
     isRegistrationOpen: boolean
+    maxTeams: string
 }
 
 export default function RegistrationStatusPage() {
@@ -20,6 +21,7 @@ export default function RegistrationStatusPage() {
     const [loading, setLoading] = useState(true)
     const [isSaving, setIsSaving] = useState(false)
     const [registrationDeadline, setRegistrationDeadline] = useState("")
+    const [maxTeams, setMaxTeams] = useState("")
 
     useEffect(() => {
         fetchRegistrationConfig()
@@ -42,6 +44,9 @@ export default function RegistrationStatusPage() {
 
                     const formattedDeadline = `${year}-${month}-${day}T${hours}:${minutes}`
                     setRegistrationDeadline(formattedDeadline)
+                }
+                if (data.maxTeams) {
+                    setMaxTeams(data.maxTeams)
                 }
             } else {
                 console.error("[v0] API error:", res.status)
@@ -225,6 +230,103 @@ export default function RegistrationStatusPage() {
                             <p className="text-lg font-semibold">{new Date(config.registrationStopAt).toLocaleString()}</p>
                         </div>
                     )}
+                </CardContent>
+            </Card>
+
+            {/* Set Max Teams Card */}
+            <Card className="border-2 border-accent/20 shadow-lg">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
+                        <TrophyIcon className="w-5 h-5 sm:w-6 sm:h-6 text-accent flex-shrink-0" />
+                        <span className="truncate">Maximum Teams Allowed</span>
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <form
+                        onSubmit={async (e) => {
+                            e.preventDefault()
+                            if (!maxTeams || parseInt(maxTeams) <= 0) {
+                                toast.error("Please enter a valid number of teams")
+                                return
+                            }
+
+                            setIsSaving(true)
+                            try {
+                                const res = await fetch("/api/admin/registration-config", {
+                                    method: "PATCH",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({
+                                        maxTeams: maxTeams,
+                                    }),
+                                })
+
+                                if (res.ok) {
+                                    const updatedConfig = await res.json()
+                                    setConfig(updatedConfig)
+                                    setMaxTeams(updatedConfig.maxTeams)
+                                    toast.success(`Maximum teams updated to ${maxTeams}`)
+                                } else {
+                                    const errorData = await res.json()
+                                    toast.error(errorData.error || "Failed to update max teams")
+                                }
+                            } catch (error) {
+                                console.error("[v0] Update max teams error:", error)
+                                toast.error("An error occurred while updating max teams")
+                            } finally {
+                                setIsSaving(false)
+                            }
+                        }}
+                        className="space-y-4 sm:space-y-6"
+                    >
+                        <div className="space-y-2 sm:space-y-3">
+                            <Label htmlFor="maxTeams" className="text-sm sm:text-base font-semibold">
+                                Number of Teams
+                            </Label>
+                            <p className="text-xs sm:text-sm text-muted-foreground">
+                                Set the maximum number of teams that can participate in the tournament.
+                            </p>
+                            <Input
+                                id="maxTeams"
+                                type="number"
+                                value={maxTeams}
+                                onChange={(e) => setMaxTeams(e.target.value)}
+                                className="mt-2 bg-card/50 border-accent/20 focus:border-accent focus:ring-accent/20 text-sm"
+                                min="1"
+                                max="9999"
+                                required
+                            />
+                            {maxTeams && (
+                                <p className="text-xs text-muted-foreground mt-2">
+                                    Tournament will accept up to <strong>{maxTeams}</strong> teams
+                                </p>
+                            )}
+                        </div>
+
+                        <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 sm:p-4">
+                            <p className="text-xs sm:text-sm text-muted-foreground">
+                                <strong>Note:</strong> Existing team registrations will not be affected. This limit applies to new registrations only.
+                            </p>
+                        </div>
+
+                        <Button
+                            type="submit"
+                            disabled={isSaving || !maxTeams}
+                            className="w-full bg-gradient-to-r from-accent to-secondary text-white hover:shadow-lg gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                        >
+                            {isSaving ? (
+                                <>
+                                    <Loader2 className="w-4 h-4 animate-spin flex-shrink-0" />
+                                    <span className="hidden sm:inline">Updating...</span>
+                                    <span className="sm:hidden">Updating</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Save className="w-4 h-4 flex-shrink-0" />
+                                    Save Max Teams
+                                </>
+                            )}
+                        </Button>
+                    </form>
                 </CardContent>
             </Card>
 

@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
+import { Button } from "@/src/components/ui/button"
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 
 interface Config {
   id: string

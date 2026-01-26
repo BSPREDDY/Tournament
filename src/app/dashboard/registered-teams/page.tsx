@@ -5,7 +5,7 @@ import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { Badge } from "@/src/components/ui/badge"
 import { toast } from "sonner"
-import { Users, Trophy, Phone, Mail, Gamepad2 } from "lucide-react"
+import { Users, Trophy, Phone, Mail, Gamepad2, Info, X } from "lucide-react"
 import type { FormData, User } from "@/src/db/schema/schema"
 
 interface TeamWithUser extends FormData {
@@ -29,6 +29,7 @@ export default function RegisteredTeamsPage() {
     const [teams, setTeams] = useState<TeamWithUser[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [user, setUser] = useState<User | null>(null)
+    const [showSlotsAlert, setShowSlotsAlert] = useState(true)
 
     useEffect(() => {
         const fetchUserAndTeams = async () => {
@@ -87,20 +88,38 @@ export default function RegisteredTeamsPage() {
 
     if (teams.length === 0) {
         return (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
                 <div className="space-y-6 text-center">
                     <div>
-                        <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent mb-4">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent mb-3 sm:mb-4">
                             Registered Teams
                         </h1>
-                        <p className="text-muted-foreground mt-1 text-lg">
+                        <p className="text-muted-foreground mt-1 text-sm sm:text-base lg:text-lg">
                             View all registered tournament teams
                         </p>
                     </div>
                     <Card className="border-primary/10">
                         <CardContent className="pt-6">
-                            <Users className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-                            <p className="text-muted-foreground">No teams registered yet</p>
+                            <Users className="w-10 h-10 sm:w-12 sm:h-12 text-muted-foreground mx-auto mb-3" />
+                            <p className="text-sm sm:text-base text-muted-foreground">No teams registered yet</p>
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
+        )
+    }
+
+    if (isLoading) {
+        return (
+            <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
+                <div className="space-y-6">
+                    <div>
+                        <h1 className="text-2xl sm:text-3xl font-bold">Registered Teams</h1>
+                        <p className="text-muted-foreground mt-1 text-sm sm:text-base">View all registered tournament teams</p>
+                    </div>
+                    <Card>
+                        <CardContent className="pt-6">
+                            <p className="text-center text-sm text-muted-foreground">Loading teams...</p>
                         </CardContent>
                     </Card>
                 </div>
@@ -110,21 +129,39 @@ export default function RegisteredTeamsPage() {
 
     return (
         <>
-            <div className="min-h-screen pt-20 pb-12">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full pb-8 sm:pb-12">
+                <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
                     <div className="space-y-8">
+                        {/* Slots Info Alert */}
+                        {showSlotsAlert && (
+                            <div className="p-3 sm:p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg flex items-start gap-3 group hover:bg-blue-500/15 transition-all">
+                                <Info className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-xs sm:text-sm text-blue-700 dark:text-blue-300">
+                                        <strong>Slots Information:</strong> Click on "View Slots" to see how many players are registered for each team (e.g., 2/4 means 2 players out of 4 slots filled).
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={() => setShowSlotsAlert(false)}
+                                    className="flex-shrink-0 text-blue-600 hover:text-blue-700 mt-0.5"
+                                >
+                                    <X className="w-4 h-4" />
+                                </button>
+                            </div>
+                        )}
+
                         {/* Header */}
-                        <div className="text-center mb-12">
-                            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent mb-4">
+                        <div className="text-center mb-8 sm:mb-12">
+                            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent mb-3 sm:mb-4">
                                 Tournament Teams
                             </h1>
-                            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                            <p className="text-sm sm:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
                                 Explore all the teams registered for the BGMI tournament competition.
                             </p>
                         </div>
 
                         {/* Stats */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
                             <Card className="border-primary/10 bg-gradient-to-br from-primary/5 to-transparent">
                                 <CardContent className="pt-6">
                                     <div className="flex items-center justify-between">
@@ -162,18 +199,18 @@ export default function RegisteredTeamsPage() {
 
                         {/* Teams Table View */}
                         <Card className="border-primary/10 overflow-hidden">
-                            <CardHeader className="bg-gradient-to-r from-primary/5 to-transparent pb-3">
-                                <CardTitle>Team Details</CardTitle>
+                            <CardHeader className="bg-gradient-to-r from-primary/5 to-transparent pb-2 sm:pb-3">
+                                <CardTitle className="text-base sm:text-lg">Team List</CardTitle>
                             </CardHeader>
                             <CardContent className="p-0">
                                 <div className="overflow-x-auto">
-                                    <table className="w-full">
+                                    <table className="w-full text-xs sm:text-sm">
                                         <thead className="bg-muted/50 border-b border-primary/10">
                                             <tr>
-                                                <th className="px-4 py-3 text-left text-sm font-semibold text-foreground">No.</th>
-                                                <th className="px-4 py-3 text-left text-sm font-semibold text-foreground">Team Name</th>
-                                                <th className="px-4 py-3 text-left text-sm font-semibold text-foreground">IGL Name</th>
-                                                <th className="px-4 py-3 text-left text-sm font-semibold text-foreground">IGL Contact</th>
+                                                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-foreground">No.</th>
+                                                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-foreground">Team Name</th>
+                                                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-foreground hidden sm:table-cell">IGL Name</th>
+                                                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-foreground">Slots</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-primary/10">
@@ -182,29 +219,27 @@ export default function RegisteredTeamsPage() {
                                                     key={team.id}
                                                     className="hover:bg-primary/5 transition-colors group cursor-pointer"
                                                 >
-                                                    <td className="px-4 py-3 text-sm font-medium text-foreground">{index + 1}</td>
-                                                    <td className="px-4 py-3 text-sm text-foreground font-medium group-hover:text-primary transition-colors">
-                                                        {team.teamName}
-                                                    </td>
-                                                    <td className="px-4 py-3 text-sm text-foreground flex items-center gap-2">
-                                                        <Gamepad2 className="w-4 h-4 text-primary/60" />
-                                                        {team.iglName}
-                                                    </td>
-                                                    <td className="px-4 py-3 text-sm">
-                                                        <div className="space-y-1">
-                                                            <a
-                                                                href={`mailto:${team.iglMail}`}
-                                                                className="text-primary hover:underline block text-xs"
-                                                            >
-                                                                {team.iglMail}
-                                                            </a>
-                                                            <a
-                                                                href={`tel:${team.iglNumber}`}
-                                                                className="text-primary hover:underline block text-xs"
-                                                            >
-                                                                {team.iglNumber}
-                                                            </a>
+                                                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-medium text-foreground">{index + 1}</td>
+                                                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-foreground font-medium group-hover:text-primary transition-colors">
+                                                        <div className="flex flex-col">
+                                                            <span>{team.teamName}</span>
+                                                            <span className="sm:hidden text-muted-foreground text-xs">IGL: {team.iglName}</span>
                                                         </div>
+                                                    </td>
+                                                    <td className="hidden sm:table-cell px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-foreground flex items-center gap-2">
+                                                        <Gamepad2 className="w-3 h-3 sm:w-4 sm:h-4 text-primary/60 flex-shrink-0" />
+                                                        <span className="truncate">{team.iglName}</span>
+                                                    </td>
+                                                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
+                                                        <button
+                                                            onClick={() => {
+                                                                const players = [team.player1, team.player2, team.player3, team.player4].filter(Boolean).length
+                                                                alert(`${team.teamName} has ${players} players registered.\n\nPlayer Slots: ${players}/4`)
+                                                            }}
+                                                            className="px-2 sm:px-3 py-1 bg-primary/10 text-primary hover:bg-primary/20 rounded-md transition-colors text-xs font-medium whitespace-nowrap"
+                                                        >
+                                                            View Slots
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             ))}
@@ -214,94 +249,7 @@ export default function RegisteredTeamsPage() {
                             </CardContent>
                         </Card>
 
-                        {/* Teams Grid - Detailed View */}
-                        <div className="mt-12">
-                            <h2 className="text-2xl font-bold mb-6">Team Details</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {teams.map((team) => (
-                                    <Card
-                                        key={team.id}
-                                        className="border-primary/10 hover:border-primary/30 transition-all hover:shadow-lg overflow-hidden group"
-                                    >
-                                        <CardHeader className="pb-3 bg-gradient-to-r from-primary/5 to-transparent">
-                                            <div className="flex items-start justify-between gap-2">
-                                                <div className="flex-1 min-w-0">
-                                                    <CardTitle className="text-lg truncate group-hover:text-primary transition-colors">
-                                                        {team.teamName}
-                                                    </CardTitle>
-                                                    <CardDescription className="mt-1 flex items-center gap-1">
-                                                        <Gamepad2 className="w-3 h-3" />
-                                                        IGL: {team.iglName}
-                                                    </CardDescription>
-                                                </div>
-                                                <Badge variant="secondary" className="flex-shrink-0">
-                                                    Registered
-                                                </Badge>
-                                            </div>
-                                        </CardHeader>
-                                        <CardContent className="space-y-4">
-                                            {/* IGL Section */}
-                                            <div className="border-b border-primary/10 pb-4">
-                                                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
-                                                    In-Game Leader
-                                                </p>
-                                                <div className="space-y-2 text-sm">
-                                                    <div>
-                                                        <p className="text-muted-foreground text-xs">Name</p>
-                                                        <p className="font-medium text-foreground">{team.iglName}</p>
-                                                    </div>
-                                                    <div className="flex items-center gap-2">
-                                                        <Mail className="w-3 h-3 text-primary" />
-                                                        <a
-                                                            href={`mailto:${team.iglMail}`}
-                                                            className="text-primary hover:underline break-all text-xs font-medium"
-                                                        >
-                                                            {team.iglMail}
-                                                        </a>
-                                                    </div>
-                                                    <div className="flex items-center gap-2">
-                                                        <Phone className="w-3 h-3 text-primary" />
-                                                        <a
-                                                            href={`tel:${team.iglNumber}`}
-                                                            className="text-primary hover:underline text-xs font-medium"
-                                                        >
-                                                            {team.iglNumber}
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
 
-                                            {/* Players Section */}
-                                            <div>
-                                                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
-                                                    Players
-                                                </p>
-                                                <div className="space-y-2">
-                                                    {[1, 2, 3, 4].map((playerNum) => {
-                                                        const playerKey = `player${playerNum}` as PlayerKey
-                                                        const playerIdKey = `playerId${playerNum}` as PlayerIdKey
-
-                                                        const playerName = team[playerKey]
-                                                        const playerId = team[playerIdKey]
-
-
-                                                        return (
-                                                            <div
-                                                                key={playerNum}
-                                                                className="text-sm bg-gradient-to-r from-primary/5 to-secondary/5 p-2 rounded-md border border-primary/10 hover:border-primary/20 transition-colors"
-                                                            >
-                                                                <p className="font-medium truncate text-foreground">{playerName}</p>
-                                                                <p className="text-xs text-muted-foreground">ID: {playerId}</p>
-                                                            </div>
-                                                        )
-                                                    })}
-                                                </div>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                ))}
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

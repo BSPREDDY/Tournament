@@ -23,8 +23,6 @@ import {
     LogOut,
 } from "lucide-react"
 import type { User } from "@/src/db/schema/schema"
-import { Trophy } from "lucide-react"
-
 
 interface UserNavbarProps {
     user: User
@@ -44,21 +42,28 @@ export function UserNavbar({ user }: UserNavbarProps) {
 
     return (
         <nav
-            className="fixed top-0 left-0 right-0 z-50
+            className="fixed top-0 left-0 right-0 z-50 w-full
       bg-card/70 backdrop-blur-xl border-b border-primary/10
       shadow-[0_10px_35px_rgba(0,0,0,0.12)]"
         >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex h-16 items-center justify-between">
+            <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex h-14 sm:h-16 items-center justify-between gap-2 sm:gap-4">
 
                     {/* Logo */}
-                    <Link href="/dashboard" className="flex items-center gap-3 group">
-                        <div className="flex items-center gap-2">
-                            <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-lg text-white">
-                                <Trophy className="w-6 h-6" />
-                            </div>
-                            <h1 className="text-xl font-bold gradient-text">Nag • IronmanTY</h1>
+                    <Link href="/dashboard" className="flex items-center gap-2 sm:gap-3 group flex-shrink-0">
+                        <div
+                            className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-gradient-to-br from-primary to-secondary
+              text-white shadow-md group-hover:shadow-primary/40 transition-all flex-shrink-0"
+                        >
+                            <span className="text-lg sm:text-xl">🏆</span>
                         </div>
+                        <h1
+                            className="hidden sm:block text-base sm:text-lg font-extrabold tracking-tight
+              bg-gradient-to-r from-primary to-secondary
+              bg-clip-text text-transparent"
+                        >
+                            Nag • IronmanTY
+                        </h1>
                     </Link>
 
                     {/* Desktop Navigation */}
@@ -70,7 +75,7 @@ export function UserNavbar({ user }: UserNavbarProps) {
                             </Button>
                         </Link>
 
-                        <Link href="/form">
+                        <Link href="/dashboard/form">
                             <Button variant="ghost" className="gap-2 rounded-full px-4 text-sm hover:bg-primary/10">
                                 <FileText className="w-4 h-4" />
                                 Register
@@ -156,7 +161,7 @@ export function UserNavbar({ user }: UserNavbarProps) {
                             </DropdownMenuItem>
 
                             <DropdownMenuItem asChild>
-                                <Link href="/form" className="flex items-center gap-2">
+                                <Link href="/dashboard/form" className="flex items-center gap-2">
                                     <FileText className="w-4 h-4" />
                                     Register
                                 </Link>

@@ -141,6 +141,7 @@ export const RegistrationConfigTable = pgTable("registration_config", {
 
   registrationStopAt: timestamp("registration_stop_at"),
   isRegistrationOpen: boolean("is_registration_open").default(true).notNull(),
+  maxTeams: varchar("max_teams", { length: 10 }).default("999").notNull(),
 
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })

@@ -131,17 +131,17 @@ export function Sidebar() {
         <div className="lg:hidden fixed inset-0 bg-black/50 z-30 top-16" onClick={() => setMobileOpen(false)} />
       )}
 
-      {/* Desktop + Mobile Sidebar - Removed overflow-y-auto and used max-h instead */}
+      {/* Desktop + Mobile Sidebar - Fixed positioning, only main content scrolls */}
       <aside
         className={`${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-          } lg:static fixed left-0 top-16 lg:top-0 w-64 max-h-[calc(100vh-64px)] lg:max-h-screen lg:h-screen bg-card border-r border-border p-4 sm:p-6 flex flex-col transition-transform duration-300 ease-in-out z-30`}
+          } lg:fixed fixed left-0 top-16 lg:top-0 w-64 h-[calc(100vh-64px)] lg:h-screen bg-card border-r border-border p-4 sm:p-6 flex flex-col transition-transform duration-300 ease-in-out z-30`}
       >
         <div className="mb-8 hidden lg:block flex-shrink-0">
           <h1 className="text-xl sm:text-2xl font-bold text-primary">Admin Panel</h1>
           <p className="text-xs sm:text-sm text-muted-foreground">Tournament Manager</p>
         </div>
 
-        <nav className="space-y-2 flex-1 overflow-hidden">
+        <nav className="space-y-2 flex-1">
           {menuItems.map((item) => {
             const Icon = item.icon
             const isActive = pathname === item.href
