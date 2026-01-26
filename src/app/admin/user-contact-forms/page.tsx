@@ -4,7 +4,8 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { Badge } from "@/src/components/ui/badge"
 import { toast } from "sonner"
-import { Mail, User, Calendar, MessageSquare } from "lucide-react"
+import { Mail, User, Calendar, MessageSquare, Trash2 } from "lucide-react"
+import { Button } from "@/src/components/ui/button"
 import type { UserContactForm } from "@/src/db/schema/schema"
 
 interface ContactFormWithUser extends Partial<UserContactForm> {
@@ -48,6 +49,26 @@ export default function UserContactFormsPage() {
             hour: "2-digit",
             minute: "2-digit",
         })
+    }
+
+    const handleDelete = async (id: string | undefined) => {
+        if (!id) return
+
+        try {
+            const response = await fetch(`/api/admin/contact-forms/${id}`, {
+                method: "DELETE",
+            })
+
+            if (response.ok) {
+                setContactForms(contactForms.filter(form => form.id !== id))
+                toast.success("Contact form deleted successfully")
+            } else {
+                toast.error("Failed to delete contact form")
+            }
+        } catch (error) {
+            console.log("[v0] Error deleting contact form:", error)
+            toast.error("Error deleting contact form")
+        }
     }
 
     if (isLoading) {
@@ -106,11 +127,10 @@ export default function UserContactFormsPage() {
                     <Card
                         key={form.id}
                         className="border-primary/10 hover:border-primary/30 transition-all cursor-pointer hover:shadow-lg overflow-hidden group"
-                        onClick={() => setExpandedId(expandedId === form.id ? null : form.id)}
                     >
                         <CardHeader className="pb-3 bg-gradient-to-r from-primary/5 to-transparent">
                             <div className="flex items-start justify-between gap-4">
-                                <div className="flex-1 min-w-0">
+                                <div className="flex-1 min-w-0" onClick={() => setExpandedId(expandedId === form.id ? null : form.id ?? null)}>
                                     <div className="flex items-center gap-2 mb-2">
                                         <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
                                             <MessageSquare className="w-4 h-4 text-primary" />
@@ -126,9 +146,23 @@ export default function UserContactFormsPage() {
                                         </span>
                                     </CardDescription>
                                 </div>
-                                <Badge variant="secondary" className="flex-shrink-0">
-                                    {expandedId === form.id ? "Collapse" : "View"}
-                                </Badge>
+                                <div className="flex items-center gap-2 flex-shrink-0">
+                                    <Badge variant="secondary">
+                                        {expandedId === form.id ? "Collapse" : "View"}
+                                    </Badge>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            handleDelete(form.id)
+                                        }}
+                                        className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                                        title="Delete this contact form"
+                                    >
+                                        <Trash2 className="w-4 h-4" />
+                                    </Button>
+                                </div>
                             </div>
                         </CardHeader>
 

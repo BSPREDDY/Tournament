@@ -13,14 +13,9 @@ export default function Page() {
               <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-lg text-white">
                 <Trophy className="w-6 h-6" />
               </div>
-              <h1 className="text-xl font-bold gradient-text">Nag <strong>•</strong> IronmanTY</h1>
+              <h1 className="text-xl font-bold gradient-text">Nag • IronmanTY</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <Link href="/contact">
-                <Button variant="ghost" className="hover:bg-primary/10">
-                  Contact
-                </Button>
-              </Link>
               <Link href="/auth/login">
                 <Button variant="ghost" className="hover:bg-primary/10">
                   Login
@@ -41,7 +36,7 @@ export default function Page() {
         <div className="text-center space-y-6 slide-in">
           <h1 className="text-5xl sm:text-5xl md:text-7xl font-bold tracking-tight">
             <span className="block">Welcome to</span>
-            <span className="block gradient-text">Nag <strong>•</strong> IronmanTY'S Tournament</span>
+            <span className="block gradient-text">Nag • IronmanTY'S Tournament</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Register your elite gaming team and compete in the most exciting esports tournament. Showcase your skills,
@@ -225,7 +220,7 @@ export default function Page() {
             </div>
           </div>
           <div className="border-t border-primary/10 pt-5 text-center text-sm text-muted-foreground">
-            <p>&copy; {new Date().getFullYear()} Nag <strong>•</strong> IronmanTY. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Nag • IronmanTY. All rights reserved.</p>
           </div>
         </div>
       </footer>

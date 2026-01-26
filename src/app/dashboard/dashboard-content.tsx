@@ -5,9 +5,6 @@ import type { User } from "@/src/db/schema/schema"
 import { Button } from "@/src/components/ui/button"
 import Link from "next/link"
 import { Trophy } from "lucide-react"
-import { UserNavbar } from "@/src/components/user/navbar"
-import { Footer } from "@/src/components/user/footer"
-import { Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react"
 
 
 interface DashboardContentProps {
@@ -43,7 +40,6 @@ export default function DashboardContent({ user }: DashboardContentProps) {
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      <UserNavbar user={user} />
 
       <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 mt-20 flex-1">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -181,7 +177,7 @@ export default function DashboardContent({ user }: DashboardContentProps) {
                   rel="noopener noreferrer"
                   className="flex flex-col items-center gap-2 p-3 rounded-xl border bg-gradient-to-br from-pink-50 to-orange-50 dark:from-pink-950 dark:to-orange-950 hover:shadow-lg transition-all duration-200 transform hover:scale-105 text-xs"
                 >
-                  <Instagram className="w-5 h-5" />
+                  <span className="text-xl">📷</span>
                   <span className="font-bold uppercase tracking-widest text-pink-700 dark:text-pink-300">
                     Instagram
                   </span>
@@ -192,7 +188,7 @@ export default function DashboardContent({ user }: DashboardContentProps) {
                   rel="noopener noreferrer"
                   className="flex flex-col items-center gap-2 p-3 rounded-xl border bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950 dark:to-rose-950 hover:shadow-lg transition-all duration-200 transform hover:scale-105 text-xs"
                 >
-                  <Youtube className="w-5 h-5" />
+                  <span className="text-xl">▶️</span>
                   <span className="font-bold uppercase tracking-widest text-red-700 dark:text-red-300">YouTube</span>
                 </a>
               </div>
@@ -200,7 +196,6 @@ export default function DashboardContent({ user }: DashboardContentProps) {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   )
 }

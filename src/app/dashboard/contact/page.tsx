@@ -8,8 +8,7 @@ import { Button } from "@/src/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { Input } from "@/src/components/ui/input"
 import { Label } from "@/src/components/ui/label"
-import { UserNavbar } from "@/src/components/user/navbar"
-import { Footer } from "@/src/components/user/footer"
+
 import { toast } from "sonner"
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from "lucide-react"
 import type { User } from "@/src/db/schema/schema"
@@ -107,7 +106,6 @@ export default function ContactPage() {
 
     return (
         <>
-            <UserNavbar user={user} />
             <div className="min-h-screen pt-20 pb-12">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Header */}
@@ -282,7 +280,6 @@ export default function ContactPage() {
                     </Card>
                 </div>
             </div>
-            <Footer />
         </>
     )
 }

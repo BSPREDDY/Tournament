@@ -10,7 +10,7 @@ import { Label } from "@/src/components/ui/label"
 import { toast } from "sonner"
 import { Lock, ArrowLeft, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
-import { UserNavbar } from "@/src/components/user/navbar"
+
 
 export default function ChangePasswordPage() {
     const [currentUser, setCurrentUser] = useState<any>(null)
@@ -84,7 +84,6 @@ export default function ChangePasswordPage() {
 
     return (
         <div className="min-h-screen bg-background">
-            {currentUser && <UserNavbar user={currentUser} />}
 
             <main className="max-w-2xl mx-auto py-8 px-4 sm:px-6 lg:px-8 mt-20">
                 <div className="space-y-6">

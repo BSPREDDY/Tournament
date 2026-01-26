@@ -12,7 +12,7 @@ export function Footer() {
                     <div className="space-y-4">
                         <div className="flex items-center gap-2">
                             <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-lg text-white">
-                                <span className="text-xl font-bold">Nag • IronmanTY</span>
+                                <span className="text-md font-bold">Nag • IronmanTY</span>
                             </div>
                             {/* <span className="text-lg font-bold">Tournament</span> */}
                         </div>

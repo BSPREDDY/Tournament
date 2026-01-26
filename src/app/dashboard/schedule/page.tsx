@@ -5,8 +5,7 @@ import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/src/lib/auth"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { Badge } from "@/src/components/ui/badge"
-import { UserNavbar } from "@/src/components/user/navbar"
-import { Footer } from "@/src/components/user/footer"
+
 import { toast } from "sonner"
 import { Calendar, Clock, Map, Zap } from "lucide-react"
 import type { BgmiSchedule, User } from "@/src/db/schema/schema"
@@ -66,7 +65,6 @@ export default function SchedulePage() {
     if (schedules.length === 0) {
         return (
             <>
-                <UserNavbar user={user} />
                 <div className="min-h-screen pt-20 pb-12">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="space-y-6">
@@ -84,14 +82,12 @@ export default function SchedulePage() {
                         </div>
                     </div>
                 </div>
-                <Footer />
             </>
         )
     }
 
     return (
         <>
-            <UserNavbar user={user} />
             <div className="min-h-screen pt-20 pb-12">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="space-y-8">
@@ -196,7 +192,6 @@ export default function SchedulePage() {
                     </div>
                 </div>
             </div>
-            <Footer />
         </>
     )
 }

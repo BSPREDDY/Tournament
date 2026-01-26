@@ -7,8 +7,7 @@ import { Badge } from "@/src/components/ui/badge"
 import { toast } from "sonner"
 import { Shield, ArrowLeft, Lock, LogOut, AlertCircle, Check } from "lucide-react"
 import Link from "next/link"
-import { UserNavbar } from "@/src/components/user/navbar"
-import { Footer } from "@/src/components/user/footer"
+
 
 export default function SecurityPage() {
     const [user, setUser] = useState<any>(null)
@@ -55,17 +54,14 @@ export default function SecurityPage() {
     if (loading)
         return (
             <div className="flex flex-col min-h-screen bg-background pt-20">
-                {currentUser && <UserNavbar user={currentUser} />}
                 <div className="text-center py-8 flex-1">
                     <div className="animate-spin rounded-full h-8 w-8 border-4 border-primary/30 border-t-primary mx-auto"></div>
                 </div>
-                <Footer />
             </div>
         )
 
     return (
         <div className="flex flex-col min-h-screen bg-background">
-            {currentUser && <UserNavbar user={currentUser} />}
 
             <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8 mt-20 flex-1">
                 <div className="space-y-6">
@@ -232,7 +228,6 @@ export default function SecurityPage() {
                     </Card>
                 </div>
             </main>
-            <Footer />
         </div>
     )
 }

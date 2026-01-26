@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/src/components/ui/button"
 import {
@@ -12,23 +11,29 @@ import {
     DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
-import { X, Menu, UserCircle, Lock, LayoutDashboard, LogOut } from "lucide-react"
+import {
+    LayoutDashboard,
+    FileText,
+    Calendar,
+    Users,
+    Mail,
+    UserCircle,
+    Lock,
+    Shield,
+    LogOut,
+} from "lucide-react"
 import type { User } from "@/src/db/schema/schema"
+import { Trophy } from "lucide-react"
+
 
 interface UserNavbarProps {
     user: User
 }
 
 export function UserNavbar({ user }: UserNavbarProps) {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
     const handleLogout = async () => {
-        try {
-            await fetch("/api/auth/logout", { method: "POST" })
-            window.location.href = "/"
-        } catch (error) {
-            console.error("Logout failed:", error)
-        }
+        await fetch("/api/auth/logout", { method: "POST" })
+        window.location.href = "/"
     }
 
     const getInitials = () => {
@@ -38,167 +43,171 @@ export function UserNavbar({ user }: UserNavbarProps) {
     }
 
     return (
-        <nav className="fixed top-0 left-0 right-0 bg-gradient-to-r from-card via-card to-card border-b border-primary/10 z-50 shadow-lg backdrop-blur-sm bg-opacity-95">
+        <nav
+            className="fixed top-0 left-0 right-0 z-50
+      bg-card/70 backdrop-blur-xl border-b border-primary/10
+      shadow-[0_10px_35px_rgba(0,0,0,0.12)]"
+        >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-16">
+                <div className="flex h-16 items-center justify-between">
+
                     {/* Logo */}
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                        <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-lg text-white">
-                            <span className="text-xl font-bold">Nag • IronmanTY</span>
+                    <Link href="/dashboard" className="flex items-center gap-3 group">
+                        <div className="flex items-center gap-2">
+                            <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-lg text-white">
+                                <Trophy className="w-6 h-6" />
+                            </div>
+                            <h1 className="text-xl font-bold gradient-text">Nag • IronmanTY</h1>
                         </div>
-                        {/* <h1 className="text-lg sm:text-xl font-bold hidden sm:block">Tournament</h1> */}
-                    </div>
+                    </Link>
 
                     {/* Desktop Navigation */}
-                    <div className="hidden md:flex items-center space-x-1">
+                    <div className="hidden md:flex items-center gap-1">
                         <Link href="/dashboard">
-                            <Button variant="ghost" className="text-sm">
+                            <Button variant="ghost" className="gap-2 rounded-full px-4 text-sm hover:bg-primary/10">
+                                <LayoutDashboard className="w-4 h-4" />
                                 Dashboard
                             </Button>
                         </Link>
+
                         <Link href="/form">
-                            <Button variant="ghost" className="text-sm">
+                            <Button variant="ghost" className="gap-2 rounded-full px-4 text-sm hover:bg-primary/10">
+                                <FileText className="w-4 h-4" />
                                 Register
                             </Button>
                         </Link>
+
                         <Link href="/dashboard/schedule">
-                            <Button variant="ghost" className="text-sm">
+                            <Button variant="ghost" className="gap-2 rounded-full px-4 text-sm hover:bg-primary/10">
+                                <Calendar className="w-4 h-4" />
                                 Schedule
                             </Button>
                         </Link>
+
                         <Link href="/dashboard/registered-teams">
-                            <Button variant="ghost" className="text-sm">
-                                Registered Teams
+                            <Button variant="ghost" className="gap-2 rounded-full px-4 text-sm hover:bg-primary/10">
+                                <Users className="w-4 h-4" />
+                                Teams
                             </Button>
                         </Link>
+
                         <Link href="/dashboard/contact">
-                            <Button variant="ghost" className="text-sm">
+                            <Button variant="ghost" className="gap-2 rounded-full px-4 text-sm hover:bg-primary/10">
+                                <Mail className="w-4 h-4" />
                                 Contact
                             </Button>
                         </Link>
                     </div>
 
-                    {/* Mobile Menu Button */}
-                    <div className="md:hidden flex items-center gap-2">
-                        <button
-                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="p-2 rounded-md hover:bg-primary/10 transition-colors"
-                            aria-label="Toggle menu"
-                        >
-                            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-                        </button>
-                    </div>
-
                     {/* User Dropdown */}
-                    <div className="flex items-center gap-4 flex-shrink-0">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button
-                                    variant="ghost"
-                                    className="relative h-10 w-10 rounded-full hover:bg-primary/10 transition-colors"
-                                >
-                                    <Avatar className="h-10 w-10 border-2 border-primary/20 hover:border-primary/50 transition-colors">
-                                        <AvatarImage src={`https://avatar.vercel.sh/${user.email}`} />
-                                        <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-white font-semibold text-xs">
-                                            {getInitials()}
-                                        </AvatarFallback>
-                                    </Avatar>
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="w-56" align="end" forceMount>
-                                <DropdownMenuLabel className="font-normal">
-                                    <div className="flex flex-col space-y-1">
-                                        <p className="text-sm font-medium leading-none">
-                                            {user.firstName} {user.lastName}
-                                        </p>
-                                        <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
-                                    </div>
-                                </DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild>
-                                    <Link href="/dashboard/profile" className="flex items-center gap-2 cursor-pointer">
-                                        <UserCircle className="w-4 h-4" />
-                                        <span>My Profile</span>
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem asChild>
-                                    <Link href="/dashboard/security" className="flex items-center gap-2 cursor-pointer">
-                                        <Lock className="w-4 h-4" />
-                                        <span>Security</span>
-                                    </Link>
-                                </DropdownMenuItem>
-                                {user.role === "admin" && (
-                                    <>
-                                        <DropdownMenuSeparator />
-                                        <DropdownMenuItem asChild>
-                                            <Link href="/admin" className="flex items-center gap-2 cursor-pointer text-primary">
-                                                <LayoutDashboard className="w-4 h-4" />
-                                                <span>Admin Dashboard</span>
-                                            </Link>
-                                        </DropdownMenuItem>
-                                    </>
-                                )}
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem
-                                    onClick={handleLogout}
-                                    className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive"
-                                >
-                                    <LogOut className="w-4 h-4" />
-                                    <span>Logout</span>
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
-                </div>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                className="h-10 w-10 rounded-full hover:bg-primary/10 transition-all"
+                            >
+                                <Avatar className="h-9 w-9 border border-primary/20">
+                                    <AvatarImage src={`https://avatar.vercel.sh/${user.email}`} />
+                                    <AvatarFallback
+                                        className="bg-gradient-to-br from-primary to-secondary
+                    text-white text-xs font-bold"
+                                    >
+                                        {getInitials()}
+                                    </AvatarFallback>
+                                </Avatar>
+                            </Button>
+                        </DropdownMenuTrigger>
 
-                {/* Mobile Menu */}
-                {mobileMenuOpen && (
-                    <div className="md:hidden border-t border-primary/10 bg-card/95">
-                        <div className="space-y-1 px-2 pt-2 pb-3">
-                            <Link href="/dashboard">
-                                <Button variant="ghost" className="w-full justify-start">
-                                    Dashboard
-                                </Button>
-                            </Link>
-                            <Link href="/form">
-                                <Button variant="ghost" className="w-full justify-start">
-                                    Register
-                                </Button>
-                            </Link>
-                            <Link href="/dashboard/schedule">
-                                <Button variant="ghost" className="w-full justify-start">
-                                    Schedule
-                                </Button>
-                            </Link>
-                            <Link href="/dashboard/registered-teams">
-                                <Button variant="ghost" className="w-full justify-start">
-                                    Registered Teams
-                                </Button>
-                            </Link>
-                            <Link href="/dashboard/contact">
-                                <Button variant="ghost" className="w-full justify-start">
-                                    Contact
-                                </Button>
-                            </Link>
-                            <Link href="/dashboard/profile">
-                                <Button variant="ghost" className="w-full justify-start gap-2">
+                        <DropdownMenuContent
+                            align="end"
+                            className="w-56 rounded-xl border border-primary/10
+              bg-card/95 backdrop-blur-xl shadow-xl"
+                        >
+                            <DropdownMenuLabel>
+                                <p className="text-sm font-semibold">
+                                    {user.firstName} {user.lastName}
+                                </p>
+                                <p className="text-xs text-muted-foreground">{user.email}</p>
+                            </DropdownMenuLabel>
+
+                            <DropdownMenuSeparator />
+
+                            <DropdownMenuItem asChild>
+                                <Link href="/dashboard/profile" className="flex items-center gap-2">
                                     <UserCircle className="w-4 h-4" />
                                     My Profile
-                                </Button>
-                            </Link>
-                            <Link href="/dashboard/security">
-                                <Button variant="ghost" className="w-full justify-start gap-2">
+                                </Link>
+                            </DropdownMenuItem>
+
+                            <DropdownMenuItem asChild>
+                                <Link href="/dashboard/security" className="flex items-center gap-2">
                                     <Lock className="w-4 h-4" />
                                     Security
-                                </Button>
-                            </Link>
-                            <Button onClick={handleLogout} variant="ghost" className="w-full justify-start gap-2 text-destructive">
+                                </Link>
+                            </DropdownMenuItem>
+
+                            <DropdownMenuSeparator />
+
+                            <DropdownMenuItem asChild>
+                                <Link href="/dashboard" className="flex items-center gap-2">
+                                    <LayoutDashboard className="w-4 h-4" />
+                                    Dashboard
+                                </Link>
+                            </DropdownMenuItem>
+
+                            <DropdownMenuItem asChild>
+                                <Link href="/form" className="flex items-center gap-2">
+                                    <FileText className="w-4 h-4" />
+                                    Register
+                                </Link>
+                            </DropdownMenuItem>
+
+                            <DropdownMenuItem asChild>
+                                <Link href="/dashboard/schedule" className="flex items-center gap-2">
+                                    <Calendar className="w-4 h-4" />
+                                    Schedule
+                                </Link>
+                            </DropdownMenuItem>
+
+                            <DropdownMenuItem asChild>
+                                <Link href="/dashboard/registered-teams" className="flex items-center gap-2">
+                                    <Users className="w-4 h-4" />
+                                    Registered Teams
+                                </Link>
+                            </DropdownMenuItem>
+
+                            <DropdownMenuItem asChild>
+                                <Link href="/dashboard/contact" className="flex items-center gap-2">
+                                    <Mail className="w-4 h-4" />
+                                    Contact
+                                </Link>
+                            </DropdownMenuItem>
+
+                            {user.role === "admin" && (
+                                <>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem asChild>
+                                        <Link href="/admin" className="flex items-center gap-2 text-primary">
+                                            <Shield className="w-4 h-4" />
+                                            Admin Dashboard
+                                        </Link>
+                                    </DropdownMenuItem>
+                                </>
+                            )}
+
+                            <DropdownMenuSeparator />
+
+                            <DropdownMenuItem
+                                onClick={handleLogout}
+                                className="flex items-center gap-2 text-destructive cursor-pointer"
+                            >
                                 <LogOut className="w-4 h-4" />
                                 Logout
-                            </Button>
-                        </div>
-                    </div>
-                )}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
+                </div>
             </div>
         </nav>
     )

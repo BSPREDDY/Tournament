@@ -4,8 +4,6 @@ import { useState, useEffect } from "react"
 import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { Badge } from "@/src/components/ui/badge"
-import { UserNavbar } from "@/src/components/user/navbar"
-import { Footer } from "@/src/components/user/footer"
 import { toast } from "sonner"
 import { Users, Trophy, Phone, Mail, Gamepad2 } from "lucide-react"
 import type { FormData, User } from "@/src/db/schema/schema"
@@ -13,6 +11,19 @@ import type { FormData, User } from "@/src/db/schema/schema"
 interface TeamWithUser extends FormData {
     user?: User
 }
+// Player field keys from FormData
+export type PlayerKey =
+    | "player1"
+    | "player2"
+    | "player3"
+    | "player4"
+
+// Player ID field keys from FormData
+export type PlayerIdKey =
+    | "playerId1"
+    | "playerId2"
+    | "playerId3"
+    | "playerId4"
 
 export default function RegisteredTeamsPage() {
     const [teams, setTeams] = useState<TeamWithUser[]>([])
@@ -31,7 +42,7 @@ export default function RegisteredTeamsPage() {
                 setUser(userData.user)
 
                 // Load teams from the form API
-                const response = await fetch("/api/admin/forms")
+                const response = await fetch("/api/teams")
                 if (response.ok) {
                     const data = await response.json()
                     console.log("[v0] Teams fetched successfully:", data?.length || 0)
@@ -54,25 +65,19 @@ export default function RegisteredTeamsPage() {
 
     if (isLoading) {
         return (
-            <>
-                <UserNavbar user={user || ({} as User)} />
-                <div className="min-h-screen pt-20 pb-12">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="space-y-6">
-                            <div>
-                                <h1 className="text-3xl font-bold">Registered Teams</h1>
-                                <p className="text-muted-foreground mt-1">View all registered tournament teams</p>
-                            </div>
-                            <Card>
-                                <CardContent className="pt-6">
-                                    <p className="text-center text-muted-foreground">Loading teams...</p>
-                                </CardContent>
-                            </Card>
-                        </div>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="space-y-6">
+                    <div>
+                        <h1 className="text-3xl font-bold">Registered Teams</h1>
+                        <p className="text-muted-foreground mt-1">View all registered tournament teams</p>
                     </div>
+                    <Card>
+                        <CardContent className="pt-6">
+                            <p className="text-center text-muted-foreground">Loading teams...</p>
+                        </CardContent>
+                    </Card>
                 </div>
-                <Footer />
-            </>
+            </div>
         )
     }
 
@@ -82,36 +87,29 @@ export default function RegisteredTeamsPage() {
 
     if (teams.length === 0) {
         return (
-            <>
-                <UserNavbar user={user} />
-                <div className="min-h-screen pt-20 pb-12 bg-background">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="space-y-6 text-center">
-                            <div>
-                                <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent mb-4">
-                                    Registered Teams
-                                </h1>
-                                <p className="text-muted-foreground mt-1 text-lg">
-                                    View all registered tournament teams
-                                </p>
-                            </div>
-                            <Card className="border-primary/10">
-                                <CardContent className="pt-6">
-                                    <Users className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-                                    <p className="text-muted-foreground">No teams registered yet</p>
-                                </CardContent>
-                            </Card>
-                        </div>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="space-y-6 text-center">
+                    <div>
+                        <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent mb-4">
+                            Registered Teams
+                        </h1>
+                        <p className="text-muted-foreground mt-1 text-lg">
+                            View all registered tournament teams
+                        </p>
                     </div>
+                    <Card className="border-primary/10">
+                        <CardContent className="pt-6">
+                            <Users className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+                            <p className="text-muted-foreground">No teams registered yet</p>
+                        </CardContent>
+                    </Card>
                 </div>
-                <Footer />
-            </>
+            </div>
         )
     }
 
     return (
         <>
-            <UserNavbar user={user} />
             <div className="min-h-screen pt-20 pb-12">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="space-y-8">
@@ -280,10 +278,12 @@ export default function RegisteredTeamsPage() {
                                                 </p>
                                                 <div className="space-y-2">
                                                     {[1, 2, 3, 4].map((playerNum) => {
-                                                        const playerKey = `player${playerNum}` as const
-                                                        const playerIdKey = `playerId${playerNum}` as const
+                                                        const playerKey = `player${playerNum}` as PlayerKey
+                                                        const playerIdKey = `playerId${playerNum}` as PlayerIdKey
+
                                                         const playerName = team[playerKey]
                                                         const playerId = team[playerIdKey]
+
 
                                                         return (
                                                             <div
@@ -305,7 +305,6 @@ export default function RegisteredTeamsPage() {
                     </div>
                 </div>
             </div>
-            <Footer />
         </>
     )
 }

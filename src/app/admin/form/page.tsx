@@ -9,7 +9,8 @@ import { Input } from "@/src/components/ui/input"
 import { toast } from "sonner"
 import { ArrowLeft, Loader2 } from "lucide-react"
 import Link from "next/link"
-
+import { UserNavbar } from "@/src/components/user/navbar"
+import { Footer } from "@/src/components/user/footer"
 import type { User } from "@/src/db/schema/schema"
 
 export default function FormPage() {
@@ -123,6 +124,7 @@ export default function FormPage() {
   if (registrationClosed) {
     return (
       <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+        {user && <UserNavbar user={user} />}
         <div className="pt-20 sm:pt-24 md:pt-28 flex-1 flex items-center justify-center px-4">
           <div className="max-w-md w-full text-center">
             <h1 className="text-2xl sm:text-3xl font-bold text-destructive mb-4">Registration Closed</h1>
@@ -132,12 +134,14 @@ export default function FormPage() {
             </Link>
           </div>
         </div>
+        <Footer />
       </div>
     )
   }
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+      {user && <UserNavbar user={user} />}
       <div className="pt-20 sm:pt-24 md:pt-28 py-6 sm:py-8 md:py-12 flex-1">
         <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
           <div className="flex flex-col gap-4 mb-6 sm:mb-8">
@@ -323,6 +327,7 @@ export default function FormPage() {
           </form>
         </div>
       </div>
+      <Footer />
     </div>
   )
 }
