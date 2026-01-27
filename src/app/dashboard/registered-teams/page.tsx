@@ -73,18 +73,18 @@ export default function RegisteredTeamsPage() {
 
     if (isLoading) {
         return (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="space-y-6">
+            <div className="min-h-screen pt-20 pb-12">
+                {/* <div className="space-y-6">
                     <div>
                         <h1 className="text-3xl font-bold">Registered Teams</h1>
                         <p className="text-muted-foreground mt-1">View all registered tournament teams</p>
                     </div>
-                    <Card>
-                        <CardContent className="pt-6">
-                            <p className="text-center text-muted-foreground">Loading teams...</p>
-                        </CardContent>
-                    </Card>
-                </div>
+                    <Card> */}
+                <CardContent className="pt-28">
+                    <p className="text-center text-muted-foreground">Loading teams...</p>
+                </CardContent>
+                {/* </Card>
+                </div> */}
             </div>
         )
     }
@@ -145,7 +145,7 @@ export default function RegisteredTeamsPage() {
                                 <Info className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                                 <div className="flex-1 min-w-0">
                                     <p className="text-xs sm:text-sm text-blue-700 dark:text-blue-300">
-                                        <strong>Slots Information:</strong> Click on "View Slots" to see how many players are registered for each team (e.g., 2/4 means 2 players out of 4 slots filled).
+                                        <strong>Match Slots:</strong> Each match accommodates 24 teams. The "Slot" column shows your team's position in the match. The "Players" column shows how many players have registered for your team (e.g., 3/4 means 3 out of 4 players have registered).
                                     </p>
                                 </div>
                                 <button
@@ -228,7 +228,6 @@ export default function RegisteredTeamsPage() {
                                                 <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-foreground">No.</th>
                                                 <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-foreground">Team Name</th>
                                                 <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-foreground hidden sm:table-cell">IGL Name</th>
-                                                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-foreground">Match</th>
                                                 <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-foreground">Slot</th>
                                                 <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-foreground">Players</th>
                                             </tr>
@@ -253,13 +252,8 @@ export default function RegisteredTeamsPage() {
                                                             <span className="truncate">{team.iglName}</span>
                                                         </td>
                                                         <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-medium">
-                                                            <span className="inline-block px-2 py-1 bg-purple-500/10 text-purple-700 dark:text-purple-300 rounded text-xs font-semibold">
-                                                                Match {team.matchNumber}
-                                                            </span>
-                                                        </td>
-                                                        <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-medium">
                                                             <span className="inline-block px-2 py-1 bg-blue-500/10 text-blue-700 dark:text-blue-300 rounded text-xs font-semibold">
-                                                                Slot {team.positionInMatch}/24
+                                                                Slot {team.positionInMatch}
                                                             </span>
                                                         </td>
                                                         <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">

@@ -130,7 +130,7 @@ export default function AdminFormPage() {
             </Button>
           </Link>
         </div>
-        <div className="text-center">
+        <div className="text-center mt-36">
           <h1 className="text-2xl sm:text-3xl font-bold text-destructive mb-4">Registration Closed</h1>
           <p className="text-xs sm:text-sm text-muted-foreground mb-6">Registration for this tournament is currently closed</p>
         </div>

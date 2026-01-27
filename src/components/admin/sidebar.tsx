@@ -150,7 +150,7 @@ export function Sidebar() {
               <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)}>
                 <Button
                   variant={isActive ? "default" : "ghost"}
-                  className="w-full justify-start gap-3 text-sm sm:text-base"
+                  className="w-full justify-start gap-3 text-sm sm:text-base mb-1"
                 >
                   <Icon className="w-4 h-4 flex-shrink-0" />
                   <span className="hidden sm:inline">{item.label}</span>

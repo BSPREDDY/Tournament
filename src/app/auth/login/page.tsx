@@ -149,13 +149,13 @@ export default function LoginPage() {
                     </div>
 
                     <div className="space-y-3 text-sm">
-                        <button
+                        {/* <button
                             type="button"
                             onClick={() => setShowForgotPassword(true)}
                             className="w-full text-purple-400 hover:text-purple-300 font-medium transition-colors"
                         >
                             Forgot Password?
-                        </button>
+                        </button> */}
                         <p className="text-center text-gray-400">
                             Don't have an account?{" "}
                             <Link

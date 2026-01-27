@@ -193,7 +193,7 @@ function FormManagementContent() {
 
     const handleAddTeam = () => {
         // Redirect to the registration form for admin to manually add a team
-        window.location.href = "/form"
+        window.location.href = "/admin/form"
     }
 
     return (
