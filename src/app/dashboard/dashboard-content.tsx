@@ -26,12 +26,20 @@ export default function DashboardContent({ user }: DashboardContentProps) {
   const fetchFormData = async () => {
     try {
       const response = await fetch("/api/form")
+      if (!response.ok) {
+        if (response.status === 401) {
+          console.warn("[v0] Unauthorized form fetch")
+          setLoading(false)
+          return
+        }
+        throw new Error(`API error: ${response.status}`)
+      }
       const data = await response.json()
-      if (response.ok) {
+      if (data.formData) {
         setFormData(data.formData)
       }
     } catch (error) {
-      console.error("Error fetching form data:", error)
+      console.error("[v0] Error fetching form data:", error)
     } finally {
       setLoading(false)
     }
@@ -49,7 +57,7 @@ export default function DashboardContent({ user }: DashboardContentProps) {
                 <p className="text-xs sm:text-sm text-muted-foreground mt-1">Manage your team entry and status</p>
               </div>
               {!formData && (
-                <Link href="/dashboard/form" className="w-full sm:w-auto">
+                <Link href="/form" className="w-full sm:w-auto">
                   <Button className="shadow-lg bg-gradient-to-r from-primary to-secondary hover:shadow-xl transition-shadow w-full sm:w-auto">
                     Register Team
                   </Button>
@@ -124,7 +132,7 @@ export default function DashboardContent({ user }: DashboardContentProps) {
                 <p className="text-xs sm:text-sm text-muted-foreground mb-6 px-4">
                   Ready to compete? Start by registering your squad.
                 </p>
-                <Link href="/dashboard/form">
+                <Link href="/form">
                   <Button
                     variant="outline"
                     className="hover:bg-primary/5 bg-transparent text-sm w-full sm:w-auto px-4"
@@ -175,7 +183,6 @@ export default function DashboardContent({ user }: DashboardContentProps) {
                 className="flex flex-col items-center gap-2 p-3 rounded-xl border bg-gradient-to-br from-pink-50 to-orange-50 dark:from-pink-950 dark:to-orange-950 hover:shadow-lg transition-all duration-200 transform hover:scale-105 text-xs"
               >
                 <Instagram className="w-5 h-5" />
-
                 <span className="font-bold uppercase tracking-widest text-pink-700 dark:text-pink-300">
                   Instagram
                 </span>

@@ -86,22 +86,27 @@ export default function ProfilePage() {
 
             <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8 flex-1">
                 <div className="space-y-6">
-                    {/* Header */}
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div className="flex items-center gap-4 animate-in slide-in-from-left-6 fade-in duration-500">
                         <Link href="/dashboard">
-                            <Button variant="ghost" size="icon" className="hover:bg-primary/10 flex-shrink-0">
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="hover:bg-primary/10 transition-all hover:scale-105 active:scale-95"
+                            >
                                 <ArrowLeft className="w-5 h-5" />
                             </Button>
                         </Link>
-                        <h2 className="text-2xl sm:text-3xl font-bold gradient-text">My Profile</h2>
+                        <h2 className="text-2xl sm:text-3xl font-bold gradient-text tracking-tight">
+                            My Profile
+                        </h2>
                     </div>
 
                     {/* Profile Card */}
-                    <Card className="card-glow w-full">
+                    <Card className="card-glow w-full flex items-center">
                         <CardHeader className="px-4 sm:px-6">
-                            <CardTitle className="text-xl sm:text-2xl">Personal Information</CardTitle>
+                            <CardTitle className="text-xl sm:text-2xl font-bold text-primary">Personal Information</CardTitle>
                         </CardHeader>
-                        <CardContent className="px-4 sm:px-6">
+                        <CardContent className="px-6 sm:px-6">
                             {editing ? (
                                 <form onSubmit={handleUpdate} className="space-y-4">
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -167,8 +172,8 @@ export default function ProfilePage() {
                             ) : (
                                 <div className="space-y-6">
                                     {/* Avatar and Name */}
-                                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                                        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center flex-shrink-0">
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 items-center">
+                                        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/30 to-secondary/30 flex items-center justify-center animate-pulse">
                                             <User className="w-10 h-10 text-primary" />
                                         </div>
                                         <div className="flex-1">

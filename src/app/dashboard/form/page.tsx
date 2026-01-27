@@ -86,7 +86,7 @@ export default function FormPage() {
           }
         }
 
-        const res = await fetch("/api/admin/form-config")
+        const res = await fetch("/api/form-config")
         if (res.ok) {
           const data = await res.json()
           const fields = JSON.parse(data.fields || "[]")

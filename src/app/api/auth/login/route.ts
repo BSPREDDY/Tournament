@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
         });
 
         if (!user) {
+            console.warn("Login attempt for non-existent email:", email);
             return NextResponse.json(
                 { error: 'Invalid credentials' },
                 { status: 401 }
@@ -26,6 +27,7 @@ export async function POST(request: NextRequest) {
         // Verify password
         const isValidPassword = await verifyPassword(password, user.password);
         if (!isValidPassword) {
+            console.warn("Invalid password for user:", email);
             return NextResponse.json(
                 { error: 'Invalid credentials' },
                 { status: 401 }
@@ -35,6 +37,7 @@ export async function POST(request: NextRequest) {
         // Create session
         await createSession(user.id);
 
+        console.log("User logged in:", email);
         return NextResponse.json({
             message: 'Login successful',
             user: {
@@ -44,9 +47,16 @@ export async function POST(request: NextRequest) {
                 lastName: user.lastName,
                 role: user.role,
             }
-        });
+        }, { status: 200 });
     } catch (error) {
-        console.error('Login error:', error);
+        if (error instanceof Error && error.message.includes('validation')) {
+            console.error("Login validation error:", error.message);
+            return NextResponse.json(
+                { error: 'Invalid request format' },
+                { status: 400 }
+            );
+        }
+        console.error("Login error:", error);
         return NextResponse.json(
             { error: 'Login failed' },
             { status: 500 }

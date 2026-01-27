@@ -6,17 +6,28 @@ export async function POST(req: Request) {
         const { newPassword, phoneNumber } = await req.json()
 
         if (!newPassword || !phoneNumber) {
-            return Response.json({ error: "Missing required fields" }, { status: 400 })
+            console.warn("Reset password missing required fields")
+            return Response.json(
+                { error: "Missing required fields" },
+                { status: 400 }
+            )
         }
 
         // Validate phone number format
         if (!/^\+\d{10,15}$/.test(phoneNumber)) {
-            return Response.json({ error: "Invalid phone number format" }, { status: 400 })
+            console.warn("Invalid phone format for reset:", phoneNumber)
+            return Response.json(
+                { error: "Invalid phone number format" },
+                { status: 400 }
+            )
         }
 
         // Validate password strength
         if (newPassword.length < 8) {
-            return Response.json({ error: "Password must be at least 8 characters" }, { status: 400 })
+            return Response.json(
+                { error: "Password must be at least 8 characters" },
+                { status: 400 }
+            )
         }
 
         const sql = neon(process.env.DATABASE_URL!)
@@ -28,7 +39,11 @@ export async function POST(req: Request) {
         `
 
         if (userResult.length === 0) {
-            return Response.json({ error: "User not found" }, { status: 404 })
+            console.warn("User not found for phone number:", phoneNumber)
+            return Response.json(
+                { error: "User not found" },
+                { status: 404 }
+            )
         }
 
         // Hash new password
@@ -48,9 +63,16 @@ export async function POST(req: Request) {
             WHERE identifier = ${phoneNumber}
         `
 
-        return Response.json({ success: true, message: "Password reset successfully" })
+        console.log("Password reset successfully for phone:", phoneNumber)
+        return Response.json(
+            { success: true, message: "Password reset successfully" },
+            { status: 200 }
+        )
     } catch (error) {
-        console.error("[v0] Reset password error:", error)
-        return Response.json({ error: "Failed to reset password" }, { status: 500 })
+        console.error("Reset password error:", error)
+        return Response.json(
+            { error: "Failed to reset password", success: false },
+            { status: 500 }
+        )
     }
 }

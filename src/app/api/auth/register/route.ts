@@ -16,7 +16,11 @@ export async function POST(request: NextRequest) {
         })
 
         if (existingUser) {
-            return NextResponse.json({ error: "User already exists" }, { status: 400 })
+            console.warn("[v0] Registration attempt for existing email:", validatedData.email);
+            return NextResponse.json(
+                { error: "User already exists" },
+                { status: 400 }
+            )
         }
 
         // Hash password
@@ -30,6 +34,7 @@ export async function POST(request: NextRequest) {
             })
             .returning()
 
+        console.log("[v0] New user registered:", user.email);
         return NextResponse.json(
             {
                 message: "Registration successful",
@@ -44,7 +49,17 @@ export async function POST(request: NextRequest) {
             { status: 201 },
         )
     } catch (error) {
-        console.error("Registration error:", error)
-        return NextResponse.json({ error: "Registration failed" }, { status: 500 })
+        if (error instanceof Error && error.message.includes('validation')) {
+            console.error("[v0] Register validation error:", error.message);
+            return NextResponse.json(
+                { error: "Invalid request data" },
+                { status: 400 }
+            )
+        }
+        console.error("[v0] Registration error:", error)
+        return NextResponse.json(
+            { error: "Registration failed" },
+            { status: 500 }
+        )
     }
 }

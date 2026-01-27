@@ -95,8 +95,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ message: "Form submitted successfully", submission, dynamicData }, { status: 201 })
   } catch (error) {
-    console.error("Form submission error:", error)
-    return NextResponse.json({ error: "Form submission failed" }, { status: 500 })
+    if (error instanceof Error && error.message.includes("validation")) {
+      console.error("[v0] Form validation error:", error.message)
+      return NextResponse.json({ error: "Invalid form data. Please check all required fields." }, { status: 400 })
+    }
+    console.error("[v0] Form submission error:", error)
+    return NextResponse.json({ error: "Form submission failed. Please try again." }, { status: 500 })
   }
 }
 
@@ -111,9 +115,13 @@ export async function GET(request: NextRequest) {
       where: (form) => eq(form.userId, user.id),
     })
 
-    return NextResponse.json({ formData })
+    if (!formData) {
+      return NextResponse.json({ formData: null }, { status: 200 })
+    }
+
+    return NextResponse.json({ formData }, { status: 200 })
   } catch (error) {
-    console.error("Error fetching form data:", error)
-    return NextResponse.json({ error: "Failed to fetch form data" }, { status: 500 })
+    console.error("[v0] Error fetching form data:", error)
+    return NextResponse.json({ error: "Failed to fetch form data", formData: null }, { status: 500 })
   }
 }

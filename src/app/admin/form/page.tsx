@@ -68,16 +68,30 @@ export default function AdminFormPage() {
           }
         }
 
-        const res = await fetch("/api/admin/form-config")
-        if (res.ok) {
-          const data = await res.json()
-          const fields = JSON.parse(data.fields || "[]")
-          setDynamicFields(fields)
-          const dynamicValues = fields.reduce((acc: any, f: any) => ({ ...acc, [f.name]: "" }), {})
-          setFormData((prev: any) => ({ ...prev, ...dynamicValues }))
+        try {
+          const res = await fetch("/api/form-config")
+          if (res.ok) {
+            const data = await res.json()
+            const fieldsStr = data.fields || "[]"
+            try {
+              const fields = JSON.parse(fieldsStr)
+              setDynamicFields(fields)
+              const dynamicValues = fields.reduce((acc: any, f: any) => ({ ...acc, [f.name]: "" }), {})
+              setFormData((prev: any) => ({ ...prev, ...dynamicValues }))
+            } catch (parseErr) {
+              console.error("[v0] Failed to parse form fields:", parseErr)
+              setDynamicFields([])
+            }
+          } else {
+            console.error("[v0] Failed to fetch form config:", res.status)
+            setDynamicFields([])
+          }
+        } catch (fetchErr) {
+          console.error("[v0] Error fetching form config:", fetchErr)
+          setDynamicFields([])
         }
       } catch (err) {
-        console.error("Failed to load form config")
+        console.error("[v0] Failed to load form config:", err)
       }
     }
 
@@ -130,7 +144,7 @@ export default function AdminFormPage() {
             </Button>
           </Link>
         </div>
-        <div className="text-center mt-36">
+        <div className="text-center">
           <h1 className="text-2xl sm:text-3xl font-bold text-destructive mb-4">Registration Closed</h1>
           <p className="text-xs sm:text-sm text-muted-foreground mb-6">Registration for this tournament is currently closed</p>
         </div>

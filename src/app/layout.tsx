@@ -1,13 +1,30 @@
-import type { Metadata } from "next"
+import React from "react"
+import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "sonner"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"], display: "swap" })
 
 export const metadata: Metadata = {
-  title: "Tournament Registration",
-  description: "Tournament registration and management system",
+  title: "Tournament Registration System",
+  description: "Professional tournament registration and team management system with real-time slot allocation",
+  keywords: ["tournament", "registration", "gaming", "tournament manager"],
+  icons: { icon: "/favicon.ico" },
+  robots: { index: true, follow: true },
+  openGraph: {
+    title: "Tournament Registration System",
+    description: "Professional tournament registration and team management",
+    type: "website",
+  },
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: "#000000",
 }
 
 export default function RootLayout({
