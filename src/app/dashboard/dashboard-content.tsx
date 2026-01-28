@@ -57,7 +57,7 @@ export default function DashboardContent({ user }: DashboardContentProps) {
                 <p className="text-xs sm:text-sm text-muted-foreground mt-1">Manage your team entry and status</p>
               </div>
               {!formData && (
-                <Link href="/form" className="w-full sm:w-auto">
+                <Link href="/dashboard/form" className="w-full sm:w-auto">
                   <Button className="shadow-lg bg-gradient-to-r from-primary to-secondary hover:shadow-xl transition-shadow w-full sm:w-auto">
                     Register Team
                   </Button>
@@ -132,7 +132,7 @@ export default function DashboardContent({ user }: DashboardContentProps) {
                 <p className="text-xs sm:text-sm text-muted-foreground mb-6 px-4">
                   Ready to compete? Start by registering your squad.
                 </p>
-                <Link href="/form">
+                <Link href="/dashboard/form">
                   <Button
                     variant="outline"
                     className="hover:bg-primary/5 bg-transparent text-sm w-full sm:w-auto px-4"
