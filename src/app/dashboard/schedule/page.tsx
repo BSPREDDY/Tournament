@@ -88,7 +88,7 @@ export default function SchedulePage() {
 
     return (
         <>
-            <div className="min-h-screen pt-20 pb-12">
+            <div className="min-h-screen pt-5 pb-12">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="space-y-8">
                         {/* Header */}
