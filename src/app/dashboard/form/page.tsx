@@ -244,16 +244,18 @@ export default function FormPage() {
           <div className="flex flex-col gap-4 mb-6 sm:mb-8 items-center">
             <div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold gradient-text">Tournament Registration Form</h1>
-              <p className="mt-2 text-xs sm:text-sm text-muted-foreground">Fill out all the details for your team registration</p>
-              {registrationDeadline && (
-                <p className="text-xs sm:text-sm text-primary mt-2">Deadline: {new Date(registrationDeadline).toLocaleString()}</p>
-              )}
+              <p className="mt-2 text-center sm:text-sm text-muted-foreground">Fill out all the details for your team registration</p>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="card-glow rounded-xl border p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6">
             <div className="border-b pb-4 sm:pb-6">
-              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-primary mb-3 sm:mb-4">Team Information</h2>
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-primary mb-3 sm:mb-4">Team Information</h2>
+                {registrationDeadline && (
+                  <p className="text-lg sm:text-lg md:text-lg font-bold text-primary mb-3 sm:mb-4">Deadline: <span className="text-pretty/20 text-lg">{new Date(registrationDeadline).toLocaleString()}</span></p>
+                )}
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-xs sm:text-sm font-semibold text-foreground mb-2">Team Name *</label>
