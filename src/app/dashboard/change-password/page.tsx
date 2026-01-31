@@ -85,7 +85,7 @@ export default function ChangePasswordPage() {
     return (
         <div className="min-h-screen bg-background">
 
-            <main className="max-w-2xl mx-auto py-8 px-4 sm:px-6 lg:px-8 mt-20">
+            <main className="max-w-2xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
                 <div className="space-y-6">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                         <Link href="/dashboard">
