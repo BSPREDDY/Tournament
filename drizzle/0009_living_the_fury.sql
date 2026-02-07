@@ -1,0 +1,1 @@
+ALTER TABLE "matches" ADD COLUMN "visible_to_all" boolean DEFAULT false NOT NULL;

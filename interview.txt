@@ -1,0 +1,34 @@
+TOURNAMENT REGISTRATION SYSTEM - 2-MINUTE INTERVIEW EXPLANATION
+================================================================================
+
+[OPENING - 20 SECONDS]
+"I built a complete tournament registration and management system for BGMI esports 
+tournaments. It's a full-stack application built with Next.js and React, designed to 
+handle team registrations, match management, and provide both user and admin interfaces."
+
+[PROJECT SCOPE - 30 SECONDS]
+"The system has two main user types: Regular users can register their gaming teams with 
+4 players each, fill their team details and game IDs, and track their registration status. 
+Admins have a comprehensive dashboard to manage users, control registration deadlines, 
+configure dynamic forms, schedule matches, create tournament rooms with passwords, and 
+export data."
+
+[TECHNICAL IMPLEMENTATION - 40 SECONDS]
+"For the backend, I used PostgreSQL with Drizzle ORM to manage 12+ interconnected tables 
+storing users, forms, matches, and registrations. Authentication is secure with bcrypt 
+password hashing and JWT tokens in HTTP-only cookies. I created 30+ API endpoints 
+handling registration, team management, and admin operations with proper error handling 
+and validation."
+
+[FRONTEND & UX - 20 SECONDS]
+"The frontend uses React 19 with TypeScript and Tailwind CSS. I optimized performance 
+with React memoization and SWR for data fetching. Users see single toast notifications, 
+smooth animations, and responsive design working on all devices. The UI has a modern 
+gradient design with dark mode support."
+
+[CLOSING - 10 SECONDS]
+"The application is production-ready with proper security, error handling, and performance 
+optimization. It successfully manages the complete tournament workflow from registration 
+through match allocation."
+
+================================================================================

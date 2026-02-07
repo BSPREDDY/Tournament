@@ -1,0 +1,20 @@
+# v0 runtime files (should only exist in preview, not in git)
+__v0_runtime_loader.js
+__v0_devtools.tsx
+__v0_jsx-dev-runtime.ts
+instrumentation-client.js
+instrumentation-client.ts
+
+# Common ignores
+node_modules/
+.next/
+.env*.local
+.DS_Store
+
+# Personal / temp documents
+BEFORE_YOU_SUBMIT.md
+FIXES_AND_OPTIMIZATIONS.md
+COMPLETION_SUMMARY.md
+resume.txt
+interview.txt
+DELIVERY_SUMMARY.txt
