@@ -318,11 +318,3 @@ npm run db:push  # Re-run migration
 This project is private and for tournament management use only.
 
 ---
-
-## 🤝 Support
-
-For issues or questions:
-1. Check the console for error messages
-2. Review FIXES_AND_OPTIMIZATIONS.md for recent changes
-3. Check API response in Network tab
-4. Verify environment variables are set correctly
