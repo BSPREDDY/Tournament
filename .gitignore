@@ -12,6 +12,7 @@ node_modules/
 .DS_Store
 
 # Personal / temp documents
+docs/
 BEFORE_YOU_SUBMIT.md
 FIXES_AND_OPTIMIZATIONS.md
 COMPLETION_SUMMARY.md
