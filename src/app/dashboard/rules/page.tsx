@@ -63,7 +63,7 @@ export default function RulesPage() {
             items: [
                 "Each team must have exactly 4 players",
                 "One player must be designated as the In-Game Leader (IGL)",
-                "Substitute players are not allowed during a match",
+                // "Substitute players are not allowed during a match",
                 "All team members must be registered before the tournament begins",
                 "Team name must be unique and appropriate"
             ]
@@ -75,7 +75,7 @@ export default function RulesPage() {
             bgColor: "bg-secondary/10",
             items: [
                 "Teams must be ready 15 minutes before their scheduled match",
-                "Late teams will be given a 5-minute grace period",
+                // "Late teams will be given a 5-minute grace period",
                 "Failure to join within 10 minutes results in disqualification",
                 "Match schedules are final and non-negotiable",
                 "Room ID and password will be shared 10 minutes before match"

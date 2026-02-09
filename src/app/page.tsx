@@ -20,7 +20,7 @@ export default function Page() {
               <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-lg text-white shadow-lg shadow-primary/30 group-hover:shadow-primary/50 transition-all duration-300">
                 <Trophy className="w-6 h-6" />
               </div>
-              <h1 className="text-xl font-bold gradient-text">Nag • IronmanTY</h1>
+              <h1 className="text-xl font-bold gradient-text">NAG • IronmanYT</h1>
             </Link>
             <div className="flex items-center space-x-3">
               <Link href="/auth/login">
@@ -44,7 +44,7 @@ export default function Page() {
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight animate-slide-in-left">
             <span className="block">Welcome to</span>
             <span className="block bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent bg-size-200 animate-gradient-x text-4xl sm:text-6xl md:text-7xl font-black">
-              Nag • IronmanTY'S Tournament
+              NAG • IronmanYT'S Tournament
             </span>
           </h1>
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto animate-slide-in-right" style={{ animationDelay: '0.2s' }}>
@@ -73,7 +73,7 @@ export default function Page() {
         {/* Features Section */}
         <div className="mt-24 space-y-12">
           <div className="text-center slide-in">
-            <h2 className="text-4xl font-bold gradient-text">Why Choose Nag • IronmanTY'S Tournament?</h2>
+            <h2 className="text-4xl font-bold gradient-text">Why Choose NAG • IronmanYT'S Tournament?</h2>
             <p className="text-muted-foreground mt-4 max-w-xl mx-auto text-lg">
               Everything you need to manage your tournament registration and track your team's progress.
             </p>
@@ -199,7 +199,7 @@ export default function Page() {
                 <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-lg text-white shadow-lg shadow-primary/30">
                   <Trophy className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-bold gradient-text">Nag <strong>•</strong> IronmanTY</h3>
+                <h3 className="text-lg font-bold gradient-text">NAG • IronmanYT</h3>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 The ultimate platform for gaming tournament registrations and team management.
@@ -239,7 +239,7 @@ export default function Page() {
           <div className="border-t border-primary/10 pt-8 text-center text-sm text-muted-foreground slide-in" style={{ animationDelay: '0.3s' }}>
             <p className="flex items-center justify-center gap-2">
               <span className="w-2 h-2 rounded-full bg-gradient-to-r from-primary to-secondary" />
-              &copy; {new Date().getFullYear()} Nag • IronmanTY. All rights reserved.
+              &copy; {new Date().getFullYear()} NAG • IronmanYT. All rights reserved.
             </p>
           </div>
         </div>

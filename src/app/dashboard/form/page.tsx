@@ -306,7 +306,7 @@ export default function FormPage() {
                   <div key={num} className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-3 sm:mb-4">
                     <div>
                       <label className="block text-xs sm:text-sm font-semibold text-foreground mb-2">
-                        Player {num} Name {isMandatory ? "*" : "(Optional)"}
+                        Player {num} In-Game Name {isMandatory ? "*" : "(Optional)"}
                       </label>
                       <Input
                         name={`player${num}`}
@@ -320,14 +320,14 @@ export default function FormPage() {
                     </div>
                     <div>
                       <label className="block text-xs sm:text-sm font-semibold text-foreground mb-2">
-                        Player {num} ID {isMandatory ? "*" : "(Optional)"} {!isMandatory && <span className="text-xs text-muted-foreground">(11 digits)</span>}
+                        Player {num} ID {isMandatory ? "*" : "(Optional)"}{/* {!isMandatory && <span className="text-xs text-muted-foreground">(11 digits)</span>} */}
                       </label>
                       <Input
                         name={`playerId${num}`}
                         value={formData[playerIdKey]}
                         onChange={handleChange}
                         required={isMandatory}
-                        placeholder={`Enter ${isMandatory ? "" : "or skip - "}11 digit ID`}
+                        placeholder={`Enter ${isMandatory ? "" : ""}11 digit ID`}
                         className={`bg-card/50 border-primary/20 focus:border-primary focus:ring-primary/20 text-xs sm:text-sm ${errors[`playerId${num}`] ? "border-red-500 focus:border-red-500" : ""}`}
                       />
                       {errors[`playerId${num}`] && <p className="text-red-500 text-xs mt-1">{errors[`playerId${num}`]}</p>}
@@ -391,7 +391,7 @@ export default function FormPage() {
                       name="iglAlternateNumber"
                       value={formData.iglAlternateNumber}
                       onChange={handleChange}
-                      placeholder="Enter or skip - 10 digit phone number"
+                      placeholder="Enter Alternate 10 digit phone number"
                       className={`bg-card/50 border-primary/20 focus:border-primary focus:ring-primary/20 ${errors.iglAlternateNumber ? "border-red-500 focus:border-red-500" : ""}`}
                     />
                     {errors.iglAlternateNumber && <p className="text-red-500 text-xs mt-1">{errors.iglAlternateNumber}</p>}
