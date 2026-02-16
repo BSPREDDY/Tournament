@@ -46,6 +46,100 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      animation: {
+        "slide-in-down": "slideInDown 0.5s ease-out",
+        "slide-in-up": "slideInUp 0.5s ease-out",
+        "slide-in-left": "slideInLeft 0.6s ease-out",
+        "slide-in-right": "slideInRight 0.6s ease-out",
+        "blur-in": "blurIn 0.6s ease-out",
+        "bounce-in": "bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+        "fade-in": "fadeIn 0.5s ease-in-out",
+        "float": "float 4s ease-in-out infinite",
+      },
+      keyframes: {
+        slideInDown: {
+          from: {
+            opacity: "0",
+            transform: "translateY(-30px)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        slideInUp: {
+          from: {
+            opacity: "0",
+            transform: "translateY(30px)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        slideInLeft: {
+          from: {
+            opacity: "0",
+            transform: "translateX(-30px)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateX(0)",
+          },
+        },
+        slideInRight: {
+          from: {
+            opacity: "0",
+            transform: "translateX(30px)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateX(0)",
+          },
+        },
+        blurIn: {
+          from: {
+            opacity: "0",
+            filter: "blur(10px)",
+          },
+          to: {
+            opacity: "1",
+            filter: "blur(0)",
+          },
+        },
+        bounceIn: {
+          "0%": {
+            opacity: "0",
+            transform: "scale(0.3)",
+          },
+          "50%": {
+            opacity: "1",
+            transform: "scale(1.05)",
+          },
+          "70%": {
+            transform: "scale(0.9)",
+          },
+          "100%": {
+            transform: "scale(1)",
+          },
+        },
+        fadeIn: {
+          from: {
+            opacity: "0",
+          },
+          to: {
+            opacity: "1",
+          },
+        },
+        float: {
+          "0%, 100%": {
+            transform: "translateY(0px)",
+          },
+          "50%": {
+            transform: "translateY(-20px)",
+          },
+        },
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

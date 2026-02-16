@@ -6,6 +6,7 @@ import { LogOut, LayoutDashboard, Users, FileText, Settings, Menu, X, Calendar, 
 import { Button } from "@/src/components/ui/button"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
+import { ThemeToggle } from "@/src/components/theme-toggle"
 
 interface Config {
   id: string
@@ -177,15 +178,26 @@ export function Sidebar() {
           })}
         </nav>
 
-        <Button
-          onClick={handleLogout}
-          variant="outline"
-          className="w-full justify-start gap-3 text-destructive hover:text-destructive hover:bg-destructive/10 bg-transparent text-sm sm:text-base flex-shrink-0 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-destructive/20 border-destructive/30 hover:border-destructive/50"
-        >
-          <LogOut className="w-4 h-4 flex-shrink-0" />
-          <span className="hidden sm:inline">Logout</span>
-          <span className="sm:hidden text-xs">Logout</span>
-        </Button>
+        <div className="space-y-2 flex-shrink-0">
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              className="flex-1 justify-start gap-3 text-sm hover:bg-primary/10 transition-all duration-300"
+            >
+              <span className="text-xs sm:text-sm">Theme</span>
+            </Button>
+            <ThemeToggle />
+          </div>
+          <Button
+            onClick={handleLogout}
+            variant="outline"
+            className="w-full justify-start gap-3 text-destructive hover:text-destructive hover:bg-destructive/10 bg-transparent text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-destructive/20 border-destructive/30 hover:border-destructive/50"
+          >
+            <LogOut className="w-4 h-4 flex-shrink-0" />
+            <span className="hidden sm:inline">Logout</span>
+            <span className="sm:hidden text-xs">Logout</span>
+          </Button>
+        </div>
       </aside>
     </>
   )

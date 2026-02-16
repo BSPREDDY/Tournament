@@ -14,13 +14,13 @@ export async function GET() {
             orderBy: [desc(FormDataTable.createdAt)],
         })
 
-        // Reverse to get ascending order for slot calculation
-        const reversedForms = [...forms].reverse()
+        // Calculate slots in descending order starting from 25
+        const serializedForms = forms.map((f, index) => {
+            const totalTeams = forms.length
+            const slot = 25 - (index % 25)   // 25 → 1
+            const matchNumber = Math.floor((totalTeams - index - 1) / 25) + 1
+            const positionInMatch = ((totalTeams - index - 1) % 25) + 1
 
-        const serializedForms = reversedForms.map((f, index) => {
-            const slot = calculateSlot(index)
-            const matchNumber = Math.floor(index / 25) + 1
-            const positionInMatch = (index % 25) + 1
 
             return {
                 ...f,

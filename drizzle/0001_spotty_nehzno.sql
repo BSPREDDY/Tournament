@@ -1,0 +1,1 @@
+ALTER TABLE "form_data" ADD COLUMN "guest_user_id" varchar(255);

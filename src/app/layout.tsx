@@ -27,6 +27,8 @@ export const viewport: Viewport = {
   themeColor: "#000000",
 }
 
+import { ThemeProvider } from "@/src/components/theme-provider"
+
 export default function RootLayout({
   children,
 }: {
@@ -35,7 +37,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          {children}
+        </ThemeProvider>
         <Toaster position="top-right" richColors={true} />
       </body>
     </html>

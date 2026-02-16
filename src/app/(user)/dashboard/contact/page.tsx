@@ -194,7 +194,7 @@ export default function ContactPage() {
                             </CardHeader>
                             <CardContent>
                                 <p className="text-xs sm:text-sm text-muted-foreground mb-2">Join our group</p>
-                                <p className="font-medium text-xs sm:text-sm text-green-600 group-hover:text-green-700">Click to join</p>
+                                <a href="https://chat.whatsapp.com/FSKOn7z0UwcEGt8rqWvLt5" className="font-medium text-xs sm:text-sm text-green-600 group-hover:text-green-700">Click to join</a>
                             </CardContent>
                         </Card>
                     </div>

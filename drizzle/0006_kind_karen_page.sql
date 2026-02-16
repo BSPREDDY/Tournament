@@ -1,1 +1,0 @@
-ALTER TABLE "registration_config" ADD COLUMN "max_teams" varchar(10) DEFAULT '999' NOT NULL;

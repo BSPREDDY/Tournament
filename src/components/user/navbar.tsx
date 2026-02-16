@@ -1,6 +1,8 @@
 "use client"
 
 import Link from "next/link"
+import { useState, useEffect } from "react"
+import { useTheme } from "next-themes"
 import { Button } from "@/src/components/ui/button"
 import {
     DropdownMenu,
@@ -22,6 +24,8 @@ import {
     Shield,
     LogOut,
     Trophy,
+    Sun,
+    Moon,
 } from "lucide-react"
 import type { User } from "@/src/db/schema/schema"
 
@@ -30,6 +34,12 @@ interface UserNavbarProps {
 }
 
 export function UserNavbar({ user }: UserNavbarProps) {
+    const { theme, setTheme } = useTheme()
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
     const handleLogout = async () => {
         await fetch("/api/auth/logout", { method: "POST" })
         window.location.href = "/"
@@ -105,6 +115,22 @@ export function UserNavbar({ user }: UserNavbarProps) {
                         </Link>
 
                     </div>
+
+                    {/* Theme Toggle */}
+                    {mounted && (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                            className="rounded-full hover:bg-primary/10 transition-all"
+                        >
+                            {theme === "dark" ? (
+                                <Sun className="w-5 h-5 text-yellow-500" />
+                            ) : (
+                                <Moon className="w-5 h-5 text-slate-700" />
+                            )}
+                        </Button>
+                    )}
 
                     {/* User Dropdown */}
                     <DropdownMenu>

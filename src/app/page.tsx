@@ -1,15 +1,14 @@
 import Link from "next/link"
 import { Button } from "@/src/components/ui/button"
 import { Trophy, Users, Lock, ArrowRight } from "lucide-react"
-
 export default function Page() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/8 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute -top-40 right-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float opacity-60" />
+        <div className="absolute -bottom-40 left-1/3 w-80 h-80 bg-secondary/15 rounded-full blur-3xl animate-float opacity-50" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/3 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-40" style={{ animationDelay: '2s' }} />
       </div>
 
       {/* Navigation */}
@@ -22,6 +21,13 @@ export default function Page() {
               </div>
               <h1 className="text-xl font-bold gradient-text">NAG • IronmanYT</h1>
             </Link>
+            <div>
+              <Link href="/form">
+                <Button variant="ghost" className="hover:bg-primary/80 rounded-full transition-all duration-300 hover:scale-105">
+                  Register
+                </Button>
+              </Link>
+            </div>
             <div className="flex items-center space-x-3">
               <Link href="/auth/login">
                 <Button variant="ghost" className="hover:bg-primary/80 rounded-full transition-all duration-300 hover:scale-105">

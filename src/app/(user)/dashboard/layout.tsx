@@ -17,7 +17,7 @@ export default async function UserLayout({
         <div className="flex flex-col min-h-screen bg-background w-full">
             <UserNavbar user={user} />
 
-            <main className="flex-1 pt-16 sm:pt-20 px-3 sm:px-4 md:px-6 lg:px-8 w-full">
+            <main className="flex-1 pt-20 sm:pt-24 pb-12 px-3 sm:px-4 md:px-6 lg:px-8 w-full max-w-7xl mx-auto">
                 {children}
             </main>
 

@@ -48,11 +48,6 @@ async function checkRegistrationStatus() {
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await getCurrentUser()
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
-
     const body = await request.json()
 
     const registrationStatus = await checkRegistrationStatus()
@@ -63,7 +58,7 @@ export async function POST(request: NextRequest) {
     // Validate input
     const formData = tournamentFormSchema.parse(body)
 
-    // 🔥 IMPORTANT FIX: convert empty strings → null
+    // IMPORTANT FIX: convert empty strings → null
     const sanitizedData = {
       ...formData,
 
@@ -85,23 +80,45 @@ export async function POST(request: NextRequest) {
         formData.iglAlternateNumber?.trim() || null,
     }
 
-    // Prevent duplicate submission by same user
-    const existingForm = await db.query.FormDataTable.findFirst({
-      where: (form) => eq(form.userId, user.id),
-    })
+    // Get current user if logged in, otherwise allow guest submission
+    const user = await getCurrentUser()
+    const guestUserId = body.guestUserId
 
-    if (existingForm) {
-      return NextResponse.json(
-        { error: "You have already submitted a form" },
-        { status: 400 }
-      )
+    // If user is logged in, check for duplicate submission
+    if (user) {
+      const existingForm = await db.query.FormDataTable.findFirst({
+        where: (form) => eq(form.userId, user.id),
+      })
+
+      if (existingForm) {
+        return NextResponse.json(
+          { error: "You have already submitted a form" },
+          { status: 400 }
+        )
+      }
+    } else if (guestUserId) {
+      // Check for duplicate guest submission
+      const existingGuestForm = await db.query.FormDataTable.findFirst({
+        where: (form) => eq(form.guestUserId, guestUserId),
+      })
+
+      if (existingGuestForm) {
+        return NextResponse.json(
+          { error: "You have already submitted a form with this session" },
+          { status: 400 }
+        )
+      }
     }
 
-    // Insert form
+    // Use authenticated user ID or null for guest submission
+    const userId = user?.id || null
+
+    // Insert form with user ID (guest or authenticated)
     const [submission] = await db
       .insert(FormDataTable)
       .values({
-        userId: user.id,
+        userId: userId,
+        guestUserId: guestUserId || null,
         ...sanitizedData,
       })
       .returning()
@@ -147,7 +164,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ formData: formData ?? null }, { status: 200 })
   } catch (error) {
-    console.error("[v0] Error fetching form data:", error)
+    console.error("Error fetching form data:", error)
     return NextResponse.json(
       { error: "Failed to fetch form data", formData: null },
       { status: 500 }

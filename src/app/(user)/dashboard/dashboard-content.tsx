@@ -21,7 +21,7 @@ export default function DashboardContent({ user }: DashboardContentProps) {
 
   useEffect(() => {
     let isMounted = true
-    
+
     const loadData = async () => {
       if (isMounted) {
         await fetchFormData()
@@ -228,7 +228,7 @@ export default function DashboardContent({ user }: DashboardContentProps) {
 
           {/* Social Links */}
           <div className="card-glow hover-lift rounded-2xl border p-4 sm:p-6 slide-in backdrop-blur-sm" style={{ animationDelay: "0.2s" }}>
-            <h3 className="text-base sm:text-lg font-bold mb-4 gradient-text">Connect With Us</h3>
+            <h3 className="text-base sm:text-lg font-bold mb-4 gradient-text">Follow Us</h3>
             <div className="grid grid-cols-2 gap-3">
               <a
                 href="https://www.instagram.com/nagironman?igsh=b3NvMmhsdHFkaWVh"

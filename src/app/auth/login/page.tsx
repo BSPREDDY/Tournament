@@ -26,9 +26,13 @@ export default function LoginPage() {
         setIsLoading(true)
 
         try {
+            const guestUserId = localStorage.getItem("guest_user_id")
             const response = await fetch("/api/auth/login", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    ...(guestUserId && { "x-guest-user-id": guestUserId })
+                },
                 body: JSON.stringify(formData),
             })
 

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/src/lib/db';
 import { verifyPassword } from '@/src/lib/hash';
 import { createSession } from '@/src/lib/auth';
-import { UserTable } from '@/src/db/schema/schema';
+import { UserTable, FormDataTable } from '@/src/db/schema/schema';
 import { eq } from 'drizzle-orm';
 import { loginSchema } from '@/src/lib/validations';
 
@@ -36,6 +36,15 @@ export async function POST(request: NextRequest) {
 
         // Create session
         await createSession(user.id);
+
+        // Link any guest submissions to this user
+        const guestUserId = request.headers.get('x-guest-user-id');
+        if (guestUserId) {
+            await db
+                .update(FormDataTable)
+                .set({ userId: user.id, guestUserId: null })
+                .where(eq(FormDataTable.guestUserId, guestUserId))
+        }
 
         console.log("User logged in:", email);
         return NextResponse.json({

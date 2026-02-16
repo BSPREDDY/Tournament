@@ -34,9 +34,8 @@ export const FormDataTable = pgTable(
   {
     id: uuid("id").primaryKey().defaultRandom(),
 
-    userId: uuid("user_id")
-      .references(() => UserTable.id, { onDelete: "cascade" })
-      .notNull(),
+    userId: uuid("user_id").references(() => UserTable.id, { onDelete: "cascade" }),
+    guestUserId: varchar("guest_user_id", { length: 255 }),
 
     teamName: varchar("team_name", { length: 255 }).notNull(),
     iglName: varchar("igl_name", { length: 255 }).notNull(),
@@ -63,16 +62,9 @@ export const FormDataTable = pgTable(
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (table) => ({
-
-    // Optional unique → handled in DB as partial indexes
-    // ❗ DO NOT define uniqueIndex here for optional fields
-    // One form per user
-    userIdIndex: uniqueIndex("form_data_user_unique").on(table.userId),
-
-    // Required unique
+    // Required unique indexes
     iglMailIndex: uniqueIndex("form_data_igl_mail_unique").on(table.iglMail),
     iglNumberIndex: uniqueIndex("form_data_igl_number_unique").on(table.iglNumber),
-
   }),
 )
 

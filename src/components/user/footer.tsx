@@ -85,12 +85,12 @@ export function Footer() {
                                     nagcustomrooms@gmail.com
                                 </a>
                             </li>
-                            <li className="flex items-center gap-2 hover:text-primary transition-all duration-300 hover:translate-x-1 cursor-pointer group">
+                            {/* <li className="flex items-center gap-2 hover:text-primary transition-all duration-300 hover:translate-x-1 cursor-pointer group">
                                 <a href="tel:+15551234567" className="flex items-center gap-2">
                                     <Phone className="w-4 h-4 group-hover:text-primary transition-colors" />
                                     +1 (555) 123-4567
                                 </a>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
 
