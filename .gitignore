@@ -1,18 +1,65 @@
-# v0 runtime files (should only exist in preview, not in git)
+# ==============================
+# Environment Variables (CRITICAL)
+# ==============================
+.env
+.env.*
+!.env.example
+
+# ==============================
+# Node Modules
+# ==============================
+node_modules/
+
+# ==============================
+# Next.js Build Output
+# ==============================
+.next/
+out/
+build/
+
+# ==============================
+# Logs
+# ==============================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ==============================
+# OS Files
+# ==============================
+.DS_Store
+Thumbs.db
+
+# ==============================
+# Vercel / v0 Runtime Files
+# ==============================
 __v0_runtime_loader.js
 __v0_devtools.tsx
 __v0_jsx-dev-runtime.ts
 instrumentation-client.js
 instrumentation-client.ts
 
-# Common ignores
-node_modules/
-.next/
-.env*.local
-.DS_Store
-.env
+# ==============================
+# Drizzle ORM
+# ==============================
+drizzle/*.sqlite
+drizzle/*.db
 
-# Personal / temp documents
+# ==============================
+# Coverage Reports
+# ==============================
+coverage/
+
+# ==============================
+# IDE / Editor
+# ==============================
+.vscode/
+.idea/
+
+# ==============================
+# Personal / Temp Files
+# ==============================
 docs/
 BEFORE_YOU_SUBMIT.md
 FIXES_AND_OPTIMIZATIONS.md
@@ -20,3 +67,9 @@ COMPLETION_SUMMARY.md
 resume.txt
 interview.txt
 DELIVERY_SUMMARY.txt
+
+# ==============================
+# Misc
+# ==============================
+*.log
+*.tmp
