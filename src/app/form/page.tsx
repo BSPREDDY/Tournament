@@ -21,22 +21,22 @@ function FormNavbar() {
             <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-lg text-white shadow-lg shadow-primary/30 group-hover:shadow-primary/50 transition-all duration-300">
               <Trophy className="w-6 h-6" />
             </div>
-            <h1 className="text-xl font-bold gradient-text">NAG • IronmanYT</h1>
+            <h1 className="text-xl font-bold gradient-text hidden sm:block">NAG • IronmanYT</h1>
           </Link>
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-4">
             <Link href="/">
-              <Button variant="ghost" className="hover:bg-primary/80 rounded-full transition-all duration-300 hover:scale-105">
+              <Button variant="ghost" className="bg-gradient-to-r from-primary to-secondary text-white hover:shadow-xl shadow-lg shadow-primary/30 rounded-full transition-all duration-300 hover:scale-105 font-bold">
                 Home
               </Button>
             </Link>
             <Link href="/auth/login">
-              <Button variant="ghost" className="hover:bg-primary/80 rounded-full transition-all duration-300 hover:scale-105">
+              <Button variant="ghost" className="bg-gradient-to-r from-primary to-secondary text-white hover:shadow-xl shadow-lg shadow-primary/30 rounded-full transition-all duration-300 hover:scale-105 font-bold">
                 Login
               </Button>
             </Link>
             <Link href="/auth/register">
               <Button className="bg-gradient-to-r from-primary to-secondary text-white hover:shadow-xl shadow-lg shadow-primary/30 rounded-full transition-all duration-300 hover:scale-105 font-bold">
-                Register Account
+                Signup
               </Button>
             </Link>
           </div>

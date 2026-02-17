@@ -198,7 +198,7 @@ export default function RegisteredTeamsPage() {
                                 <div className="flex-1 min-w-0">
                                     <h3 className="font-semibold text-blue-700 dark:text-blue-300 mb-1 text-sm sm:text-base">Slot Information</h3>
                                     <p className="text-xs sm:text-sm text-blue-600 dark:text-blue-400 leading-relaxed">
-                                        Tournament slots are numbered <strong>25 down to 1</strong>, where slot 1 is the last available position. The "Slot" column shows your team's registration sequence. The "Players" column shows your team's completion status (e.g., 3/4 means 3 out of 4 players have registered). Login to view team details and player slots.
+                                        Tournament slots are numbered <strong>25 down to 1</strong>, where slot 1 is the last available position. The "Slot" column shows your team's registration sequence. The "Players" column shows your team's completion status (e.g., 3/4 means 3 out of 4 players have registered).
                                     </p>
                                 </div>
                                 <button
