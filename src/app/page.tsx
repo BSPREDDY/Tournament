@@ -21,22 +21,23 @@ export default function Page() {
               </div>
               <h1 className="text-xl font-bold gradient-text">NAG • IronmanYT</h1>
             </Link>
-            <div>
+
+            <div className="flex items-center space-x-3">
               <Link href="/form">
-                <Button variant="ghost" className="hover:bg-primary/80 rounded-full transition-all duration-300 hover:scale-105">
-                  Register
+                <Button variant="ghost" className="bg-gradient-to-r from-primary to-secondary text-white hover:shadow-xl shadow-lg shadow-primary/30 rounded-full transition-all duration-300 hover:scale-105 font-bold">
+                  Tournament Register Form
                 </Button>
               </Link>
-            </div>
-            <div className="flex items-center space-x-3">
+
               <Link href="/auth/login">
-                <Button variant="ghost" className="hover:bg-primary/80 rounded-full transition-all duration-300 hover:scale-105">
+                <Button variant="ghost" className="bg-gradient-to-r from-primary to-secondary text-white hover:shadow-xl shadow-lg shadow-primary/30 rounded-full transition-all duration-300 hover:scale-105 font-bold">
                   Login
                 </Button>
               </Link>
+
               <Link href="/auth/register">
                 <Button className="bg-gradient-to-r from-primary to-secondary text-white hover:shadow-xl shadow-lg shadow-primary/30 rounded-full transition-all duration-300 hover:scale-105 font-bold">
-                  Register
+                  Signup
                 </Button>
               </Link>
             </div>

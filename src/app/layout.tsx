@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "sonner"
+import { ThemeProvider } from "@/src/components/theme-provider"
 
 const inter = Inter({ subsets: ["latin"], display: "swap" })
 
@@ -27,7 +28,6 @@ export const viewport: Viewport = {
   themeColor: "#000000",
 }
 
-import { ThemeProvider } from "@/src/components/theme-provider"
 
 export default function RootLayout({
   children,
