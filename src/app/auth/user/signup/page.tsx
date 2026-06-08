@@ -8,9 +8,9 @@ import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import Link from "next/link"
 import { toast } from "sonner"
-import { Eye, EyeOff, Loader2 } from "lucide-react"
+import { Eye, EyeOff, Loader2, Users } from "lucide-react"
 
-export default function RegisterPage() {
+export default function UserSignupPage() {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
@@ -37,7 +37,7 @@ export default function RegisterPage() {
 
             if (response.ok) {
                 toast.success("Registration successful! Please login.")
-                router.push("/auth/login")
+                router.push("/auth/user/login")
             } else {
                 toast.error(data.error || "Registration failed")
             }
@@ -49,27 +49,32 @@ export default function RegisterPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-cyan-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-2000"></div>
+                <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-2000"></div>
             </div>
 
             <div className="max-w-md w-full space-y-8 relative z-10">
                 <div className="text-center">
-                    <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent mb-2">
-                        Join Us
+                    <div className="flex justify-center mb-4">
+                        <div className="p-3 bg-blue-100 rounded-full">
+                            <Users className="w-6 h-6 text-blue-600" />
+                        </div>
+                    </div>
+                    <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2">
+                        Join Tournament
                     </h2>
-                    <p className="text-gray-400">Create your tournament account</p>
+                    <p className="text-gray-600">Create your player account</p>
                 </div>
 
                 <form
-                    className="mt-8 space-y-5 bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-2xl"
+                    className="mt-8 space-y-5 bg-white rounded-2xl p-8 border border-blue-100 shadow-lg"
                     onSubmit={handleSubmit}
                 >
                     <div className="grid grid-cols-2 gap-3">
                         <div>
-                            <label htmlFor="firstName" className="block text-sm font-medium text-gray-200 mb-2">
+                            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
                                 First Name
                             </label>
                             <Input
@@ -80,11 +85,11 @@ export default function RegisterPage() {
                                 placeholder="First name"
                                 value={formData.firstName}
                                 onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                                className="w-full bg-white/5 border border-white/10 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-purple-500/20"
+                                className="w-full border-blue-200 focus:border-blue-500 focus:ring-blue-500/20"
                             />
                         </div>
                         <div>
-                            <label htmlFor="lastName" className="block text-sm font-medium text-gray-200 mb-2">
+                            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
                                 Last Name
                             </label>
                             <Input
@@ -95,13 +100,13 @@ export default function RegisterPage() {
                                 placeholder="Last name"
                                 value={formData.lastName}
                                 onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                                className="w-full bg-white/5 border border-white/10 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-purple-500/20"
+                                className="w-full border-blue-200 focus:border-blue-500 focus:ring-blue-500/20"
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2">
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                             Email Address
                         </label>
                         <Input
@@ -113,12 +118,12 @@ export default function RegisterPage() {
                             placeholder="your@email.com"
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="w-full bg-white/5 border border-white/10 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-purple-500/20"
+                            className="w-full border-blue-200 focus:border-blue-500 focus:ring-blue-500/20"
                         />
                     </div>
 
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-200 mb-2">
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                             Password
                         </label>
                         <div className="relative">
@@ -131,12 +136,12 @@ export default function RegisterPage() {
                                 placeholder="Min. 8 characters"
                                 value={formData.password}
                                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                className="w-full bg-white/5 border border-white/10 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-purple-500/20 pr-10"
+                                className="w-full border-blue-200 focus:border-blue-500 focus:ring-blue-500/20 pr-10"
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 transition-colors"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                             >
                                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                             </button>
@@ -144,7 +149,7 @@ export default function RegisterPage() {
                     </div>
 
                     <div>
-                        <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-200 mb-2">
+                        <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-2">
                             Phone Number
                         </label>
                         <Input
@@ -155,14 +160,14 @@ export default function RegisterPage() {
                             placeholder="+1234567890"
                             value={formData.phoneNumber}
                             onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
-                            className="w-full bg-white/5 border border-white/10 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-purple-500/20"
+                            className="w-full border-blue-200 focus:border-blue-500 focus:ring-blue-500/20"
                         />
                     </div>
 
                     <Button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white font-semibold py-2 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-purple-500/50"
+                        className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-2 rounded-lg transition-all duration-200 hover:shadow-lg"
                     >
                         {isLoading ? (
                             <>
@@ -174,9 +179,9 @@ export default function RegisterPage() {
                         )}
                     </Button>
 
-                    <p className="text-center text-gray-400 text-sm">
+                    <p className="text-center text-gray-600 text-sm">
                         Already have an account?{" "}
-                        <Link href="/auth/login" className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
+                        <Link href="/auth/user/login" className="text-blue-600 hover:text-blue-700 font-medium transition-colors">
                             Sign in
                         </Link>
                     </p>
