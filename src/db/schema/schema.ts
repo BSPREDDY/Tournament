@@ -256,9 +256,14 @@ export const UserTable = pgTable(
     lastName: varchar("last_name", { length: 255 }).notNull(),
 
     email: varchar("email", { length: 255 }).notNull(),
-    password: varchar("password", { length: 255 }).notNull(),
+    password: varchar("password", { length: 255 }),
 
-    phoneNumber: varchar("phone_number", { length: 15 }).notNull(),
+    phoneNumber: varchar("phone_number", { length: 15 }),
+
+    // OAuth Provider fields
+    googleId: varchar("google_id", { length: 255 }),
+    facebookId: varchar("facebook_id", { length: 255 }),
+    oauthProvider: varchar("oauth_provider", { length: 50 }), // 'google', 'facebook', or null for email/password
 
     role: UserRole("role").default("user").notNull(),
 
@@ -268,6 +273,8 @@ export const UserTable = pgTable(
   (table) => ({
     emailIndex: uniqueIndex("users_email_unique").on(table.email),
     phoneIndex: uniqueIndex("users_phone_unique").on(table.phoneNumber),
+    googleIdIndex: uniqueIndex("users_google_id_unique").on(table.googleId),
+    facebookIdIndex: uniqueIndex("users_facebook_id_unique").on(table.facebookId),
   }),
 )
 
