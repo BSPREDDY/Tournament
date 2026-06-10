@@ -51,6 +51,7 @@
 import React from "react"
 import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
+// @ts-ignore: CSS module declaration missing in the current setup
 import "./globals.css"
 import { Toaster } from "sonner"
 import { ThemeProvider } from "@/src/components/theme-provider"

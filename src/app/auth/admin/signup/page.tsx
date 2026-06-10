@@ -547,7 +547,7 @@ export default function AdminSignupPage() {
                             </div>
                         )}
 
-                        <FacebookLogin
+                        {/* <FacebookLogin
                             appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || ""}
                             fields="name,email,picture"
                             callback={handleFacebookResponse}
@@ -574,7 +574,7 @@ export default function AdminSignupPage() {
                                     )}
                                 </Button>
                             )}
-                        />
+                        /> */}
                     </div>
 
                     {/* Navigation links */}

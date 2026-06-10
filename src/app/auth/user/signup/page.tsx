@@ -483,7 +483,7 @@ export default function UserSignupPage() {
                             </div>
                         )}
 
-                        <FacebookLogin
+                        {/* <FacebookLogin
                             appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || ""}
                             fields="name,email,picture"
                             callback={handleFacebookResponse}
@@ -510,7 +510,7 @@ export default function UserSignupPage() {
                                     )}
                                 </Button>
                             )}
-                        />
+                        /> */}
                     </div>
 
                     {/* Login link */}

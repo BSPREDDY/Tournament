@@ -466,7 +466,7 @@ export default function AdminLoginPage() {
                             </div>
                         )}
 
-                        <FacebookLogin
+                        {/* <FacebookLogin
                             appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || ""}
                             fields="name,email,picture"
                             callback={handleFacebookResponse}
@@ -493,7 +493,7 @@ export default function AdminLoginPage() {
                                     )}
                                 </Button>
                             )}
-                        />
+                        /> */}
                     </div>
 
                     {/* Navigation links */}
