@@ -81,7 +81,7 @@ export async function middleware(request: NextRequest) {
     const session = request.cookies.get('session')?.value
 
     // Public routes that don't need authentication
-    const publicRoutes = ['/', '/auth/login', '/auth/register', '/auth/user/login', '/auth/user/signup', '/auth/admin/login', '/auth/admin/signup']
+    const publicRoutes = ['/', '/auth/user/login', '/auth/user/signup', '/auth/admin/login', '/auth/admin/signup']
     const isPublicRoute = publicRoutes.includes(pathname) || publicRoutes.some(route => pathname.startsWith(route))
 
     // Protected routes
@@ -90,7 +90,7 @@ export async function middleware(request: NextRequest) {
 
     if (isPublicRoute) {
         // If user is authenticated and tries to access auth pages, redirect appropriately
-        if (session && (pathname === '/auth/login' || pathname === '/auth/register')) {
+        if (session && (pathname === '/auth/user/login' || pathname === '/auth/user/signup')) {
             return NextResponse.redirect(new URL('/dashboard', request.url))
         }
         return NextResponse.next()
@@ -99,13 +99,13 @@ export async function middleware(request: NextRequest) {
     if (isProtectedRoute) {
         // If route requires auth and no session, redirect to login
         if (!session) {
-            return NextResponse.redirect(new URL('/auth/login', request.url))
+            return NextResponse.redirect(new URL('/auth/user/login', request.url))
         }
 
         // Verify the token is still valid
         const verified = verifyAuth(session)
         if (!verified) {
-            const response = NextResponse.redirect(new URL('/auth/login', request.url))
+            const response = NextResponse.redirect(new URL('/auth/user/login', request.url))
             response.cookies.delete('session')
             return response
         }

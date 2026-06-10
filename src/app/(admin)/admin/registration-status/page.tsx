@@ -468,6 +468,11 @@ interface RegistrationConfig {
     currentMatches?: number
 }
 
+interface MatchInfo {
+    matchNumber: number
+    teamCount: number
+}
+
 interface Match {
     matchNumber: number
     teamCount: number
@@ -683,14 +688,14 @@ export default function RegistrationStatusPage() {
                             </Button>
                         </div>
 
-                        {/* Teams Count */}
+                        {/* Matches Count */}
                         <div className="flex flex-col gap-4 p-4 sm:p-6 rounded-lg bg-gradient-to-br from-accent/10 to-secondary/10 border border-accent/20">
                             <div className="flex items-start gap-3 sm:gap-4">
                                 <TrophyIcon className="w-5 h-5 sm:w-6 sm:h-6 text-accent flex-shrink-0 mt-0.5" />
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-xs sm:text-sm text-muted-foreground mb-1">Teams Registered</p>
+                                    <p className="text-xs sm:text-sm text-muted-foreground mb-1">Matches Created</p>
                                     <p className="font-semibold text-sm sm:text-lg break-words">
-                                        {config?.currentMatches || 0} {config?.maxMatches ? `/ ${config.maxMatches}` : ''}
+                                        {config?.currentMatches || 0} {config?.maxMatches ? `/ ${config.maxMatches}` : ''} matches
                                     </p>
                                     {config?.maxMatches && (
                                         <div className="mt-2 sm:mt-3 w-full bg-muted rounded-full h-2 sm:h-3">
@@ -699,6 +704,11 @@ export default function RegistrationStatusPage() {
                                                 style={{ width: `${Math.min((config.currentMatches || 0) / parseInt(config.maxMatches) * 100, 100)}%` }}
                                             ></div>
                                         </div>
+                                    )}
+                                    {config?.currentTeams && (
+                                        <p className="text-xs sm:text-sm text-muted-foreground mt-2">
+                                            {config.currentTeams} teams total
+                                        </p>
                                     )}
                                 </div>
                             </div>
