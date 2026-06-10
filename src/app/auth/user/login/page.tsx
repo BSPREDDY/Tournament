@@ -333,10 +333,10 @@ export default function UserLoginPage() {
                 <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-cyan-500/10 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
             </div>
 
-            <div className="max-w-md w-full space-y-8 relative z-10">
+            <div className="max-w-md w-full space-y-0 relative z-10">
                 {/* Header */}
                 <div className="text-center">
-                    <div className="flex justify-center mb-6">
+                    <div className="flex justify-center mb-1">
                         <div className="p-4 bg-gradient-to-br from-amber-400 to-amber-500 rounded-full shadow-lg shadow-amber-400/20">
                             <Trophy className="w-8 h-8 text-amber-900" />
                         </div>
@@ -344,13 +344,13 @@ export default function UserLoginPage() {
                     <h1 className="text-5xl font-bold text-white mb-2 font-serif tracking-tight">
                         Tournament
                     </h1>
-                    <p className="text-amber-200 text-sm font-medium tracking-wide uppercase">Elite Competition Platform</p>
+                    {/* <p className="text-amber-200 text-sm font-medium tracking-wide uppercase">Elite Competition Platform</p> */}
                     <p className="text-slate-300 mt-3 text-base">Sign in to your player account and compete</p>
                 </div>
 
                 {/* Main form card */}
                 <div className="glassmorphism-dark space-y-6 p-8 backdrop-blur-xl">
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    <form onSubmit={handleSubmit} className="space-y-4 border-collapse border border-slate-700/50 rounded-xl p-4">
                         {/* Email field */}
                         <div className="space-y-2">
                             <label htmlFor="email" className="block text-sm font-semibold text-amber-200">
@@ -490,7 +490,7 @@ export default function UserLoginPage() {
                     </div>
 
                     {/* Admin login link */}
-                    <div className="text-center border-t border-slate-700/50 pt-4">
+                    {/* <div className="text-center border-t border-slate-700/50 pt-4">
                         <p className="text-slate-400 text-xs">
                             Are you an admin?{" "}
                             <Link
@@ -500,7 +500,7 @@ export default function UserLoginPage() {
                                 Admin Login
                             </Link>
                         </p>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

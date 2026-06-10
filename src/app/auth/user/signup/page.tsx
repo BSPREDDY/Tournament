@@ -346,7 +346,7 @@ export default function UserSignupPage() {
 
                 {/* Main card */}
                 <div className="glassmorphism-dark space-y-6 p-8 backdrop-blur-xl">
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    <form onSubmit={handleSubmit} className="space-y-4 border-collapse border border-slate-700/50 rounded-xl p-4">
                         {/* Name fields */}
                         <div className="grid grid-cols-2 gap-3">
                             <div className="space-y-2">
