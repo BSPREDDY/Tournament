@@ -29,12 +29,12 @@ function FormNavbar() {
                 Home
               </Button>
             </Link>
-            <Link href="/auth/login">
+            <Link href="/auth/user/login">
               <Button variant="ghost" className="bg-gradient-to-r from-primary to-secondary text-white hover:shadow-xl shadow-lg shadow-primary/30 rounded-full transition-all duration-300 hover:scale-105 font-bold">
                 Login
               </Button>
             </Link>
-            <Link href="/auth/register">
+            <Link href="/auth/user/signup">
               <Button className="bg-gradient-to-r from-primary to-secondary text-white hover:shadow-xl shadow-lg shadow-primary/30 rounded-full transition-all duration-300 hover:scale-105 font-bold">
                 Signup
               </Button>
@@ -328,7 +328,7 @@ export default function FormPage() {
                 <p className="text-sm font-semibold text-foreground">Please login to your account to access these features.</p>
               </div>
               <div className="flex flex-col gap-2 w-full">
-                <Link href="/auth/login" className="w-full">
+                <Link href="/auth/user/login" className="w-full">
                   <Button className="w-full bg-gradient-to-r from-primary to-secondary text-white hover:shadow-lg shadow-lg shadow-primary/30 transition-all duration-300 font-bold">
                     Continue to Login
                   </Button>
