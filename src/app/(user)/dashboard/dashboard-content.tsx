@@ -4,7 +4,10 @@ import { useState, useEffect, useMemo } from "react"
 import type { User } from "@/src/db/schema/schema"
 import { Button } from "@/src/components/ui/button"
 import Link from "next/link"
-import { Instagram, Trophy, Youtube, Clock } from "lucide-react"
+import { Instagram, Trophy, Youtube, Clock, Play, Users, TrendingUp } from "lucide-react"
+import { tournamentChannels, tournamentVideos, tournamentStats } from "@/src/lib/tournament-data"
+import Hero3D from "@/src/components/dashboard/hero-3d"
+import TournamentRegistration from "@/src/components/dashboard/tournament-registration"
 
 interface DashboardContentProps {
   user: User
@@ -79,124 +82,170 @@ export default function DashboardContent({ user }: DashboardContentProps) {
         <div className="absolute bottom-20 left-1/4 w-72 h-72 bg-secondary/5 rounded-full blur-3xl" />
       </div>
 
-      {/* Room Credentials Notification
-      {formData && (
-        <div className="mb-8 p-4 sm:p-6 rounded-2xl border-2 border-amber-500/30 bg-gradient-to-r from-amber-50/50 to-orange-50/50 dark:from-amber-900/20 dark:to-orange-900/20 slide-in">
-          <div className="flex items-start gap-3">
-            <Clock className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
-            <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-sm sm:text-base mb-2 text-amber-900 dark:text-amber-300">
-                Important: Match Room Credentials
-              </h3>
-              <p className="text-xs sm:text-sm text-amber-800 dark:text-amber-400 mb-3 leading-relaxed">
-                Your match room credentials will be shared approximately 20 minutes before the tournament begins. Please ensure all team members are ready at least 15 minutes before the scheduled start time to join the room with your credentials.
-              </p>
-              <div className="bg-white/50 dark:bg-black/20 rounded-lg p-3 text-xs sm:text-sm">
-                <p className="text-amber-700 dark:text-amber-300">
-                  <span className="font-semibold">Status:</span> Waiting for room assignment. Check back soon for your Room ID and Password.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )} */}
+      {/* 3D Hero Section with Videos */}
+      <Hero3D
+        videos={tournamentVideos.slice(0, 6).map((v) => ({
+          id: v.id,
+          title: v.title,
+          thumbnail: v.thumbnail,
+          duration: v.duration,
+          views: v.views,
+        }))}
+      />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+      {/* Enhanced Tournament Registration Section */}
+      {/* <TournamentRegistration formData={formData} loading={loading} /> */}
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mt-8">
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-8">
-          <div className="card-glow hover-lift rounded-2xl border p-4 sm:p-6 slide-in backdrop-blur-sm">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-              <div className="flex-1">
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Tournament Registration</h2>
-                <p className="text-xs sm:text-sm text-muted-foreground mt-1">Manage your team entry and status</p>
+
+          {/* Tournament Channels */}
+          <div className="card-glow hover-lift rounded-2xl border p-4 sm:p-6 slide-in backdrop-blur-sm" style={{ animationDelay: "0.1s" }}>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Featured Channels</h2>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1">Follow tournament broadcasts and updates</p>
               </div>
-              {!formData && (
-                <Link href="/dashboard/form" className="w-full sm:w-auto">
-                  <Button className="shadow-lg hover:shadow-2xl shadow-primary/30 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-bold transition-all duration-300 w-full sm:w-auto hover:scale-105">
-                    Register Team
-                  </Button>
-                </Link>
-              )}
+              <Youtube className="w-8 h-8 text-red-500 opacity-50" />
             </div>
 
-            {loading ? (
-              <div className="h-48 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-4 border-primary/30 border-t-primary"></div>
-              </div>
-            ) : formData ? (
-              <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-xl p-4 sm:p-6 border border-primary/10">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-                  <h4 className="text-lg sm:text-xl font-bold text-primary">{formData.teamName}</h4>
-                  <span className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold rounded-full uppercase tracking-wider shadow-md">
-                    Confirmed
-                  </span>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="bg-card/50 rounded-lg p-3 border border-primary/5">
-                    <label className="block text-xs sm:text-sm font-medium text-muted-foreground">IGL</label>
-                    <p className="font-medium text-sm break-words">{formData.iglName}</p>
-                  </div>
-                  <div className="bg-card/50 rounded-lg p-3 border border-primary/5">
-                    <label className="block text-xs sm:text-sm font-medium text-muted-foreground">Players</label>
-                    <div className="space-y-1 text-xs sm:text-sm">
-                      <p>
-                        1. {formData.player1} ({formData.playerId1})
-                      </p>
-                      <p>
-                        2. {formData.player2} ({formData.playerId2})
-                      </p>
-                      <p>
-                        3. {formData.player3} ({formData.playerId3})
-                      </p>
-                      <p>
-                        4. {formData.player4} ({formData.playerId4})
-                      </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {tournamentChannels.map((channel) => (
+                <a
+                  key={channel.id}
+                  href={channel.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative overflow-hidden rounded-xl border border-primary/10 hover:border-primary/50 bg-gradient-to-br from-black/40 to-black/20 hover:from-primary/10 hover:to-secondary/10 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20"
+                >
+                  <div className="aspect-video relative overflow-hidden">
+                    <img
+                      src={channel.thumbnail}
+                      alt={channel.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent group-hover:from-black/90 transition-all" />
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center shadow-lg">
+                        <Play className="w-6 h-6 text-white fill-white" />
+                      </div>
                     </div>
                   </div>
-                  <div className="bg-card/50 rounded-lg p-3 border border-primary/5">
-                    <label className="block text-xs sm:text-sm font-medium text-muted-foreground">Contact</label>
-                    <p className="text-xs sm:text-sm break-words">Email: {formData.iglMail}</p>
-                    <p className="text-xs sm:text-sm break-words">Alt: {formData.iglAlternateMail}</p>
+
+                  <div className="p-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="font-bold text-sm group-hover:text-primary transition-colors line-clamp-2 flex-1">{channel.name}</h3>
+                      <span className="text-xs font-bold px-2 py-1 rounded-full bg-red-500/20 text-red-400 whitespace-nowrap ml-2">
+                        {channel.platform}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{channel.description}</p>
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <Users className="w-3 h-3" />
+                        {channel.subscribers}
+                      </span>
+                    </div>
                   </div>
-                  <div className="bg-card/50 rounded-lg p-3 border border-primary/5">
-                    <label className="block text-xs sm:text-sm font-medium text-muted-foreground">Phone</label>
-                    <p className="text-xs sm:text-sm">Primary: {formData.iglNumber}</p>
-                    <p className="text-xs sm:text-sm">Alt: {formData.iglAlternateNumber}</p>
-                  </div>
-                  {dynamicFields.map(
-                    (field) =>
-                      formData[field.name] && (
-                        <div key={field.name} className="bg-card/50 rounded-lg p-3 border border-primary/5">
-                          <label className="block text-xs sm:text-sm font-medium text-muted-foreground">
-                            {field.label}
-                          </label>
-                          <p className="text-xs sm:text-sm break-words">{formData[field.name]}</p>
-                        </div>
-                      ),
-                  )}
-                </div>
-                <p className="mt-4 text-xs text-muted-foreground">
-                  Submitted on: {new Date(formData.createdAt).toLocaleDateString()}
-                </p>
-              </div>
-            ) : (
-              <div className="text-center py-12 border-2 border-dashed border-primary/20 rounded-xl hover:border-primary/40 transition-colors">
-                <Trophy className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
-                <h3 className="text-base sm:text-lg font-medium">No team registered</h3>
-                <p className="text-xs sm:text-sm text-muted-foreground mb-6 px-4">
-                  Ready to compete? Start by registering your squad.
-                </p>
-                <Link href="/dashboard/form">
-                  <Button
-                    variant="outline"
-                    className="hover:bg-primary/5 bg-transparent text-sm w-full sm:w-auto px-4"
-                  >
-                    Register Your Team
-                  </Button>
-                </Link>
-              </div>
-            )}
+                </a>
+              ))}
+            </div>
           </div>
+
+          {/* Tournament Videos */}
+          <div className="card-glow hover-lift rounded-2xl border p-4 sm:p-6 slide-in backdrop-blur-sm" style={{ animationDelay: "0.2s" }}>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Tournament Videos</h2>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1">Watch latest tournament highlights and analysis</p>
+              </div>
+              <Play className="w-8 h-8 text-amber-500 opacity-50" />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {tournamentVideos.slice(0, 4).map((video) => (
+                <a
+                  key={video.id}
+                  href={video.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative overflow-hidden rounded-xl border border-primary/10 hover:border-primary/50 bg-gradient-to-br from-black/40 to-black/20 hover:from-primary/10 hover:to-secondary/10 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20"
+                >
+                  <div className="aspect-video relative overflow-hidden">
+                    <img
+                      src={video.thumbnail}
+                      alt={video.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent group-hover:from-black/90 transition-all" />
+                    <div className="absolute top-2 right-2 bg-black/70 text-white text-xs font-bold px-2 py-1 rounded">
+                      {video.duration}
+                    </div>
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center shadow-lg">
+                        <Play className="w-6 h-6 text-white fill-white" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-4">
+                    <h3 className="font-bold text-sm mb-2 group-hover:text-primary transition-colors line-clamp-2">{video.title}</h3>
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <TrendingUp className="w-3 h-3" />
+                        {video.views}
+                      </span>
+                      <span>{video.uploadedAt}</span>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+
+            <Link href="#" className="inline-flex items-center justify-center w-full mt-6">
+              <Button variant="outline" className="w-full hover:bg-primary/10">
+                View All Videos
+              </Button>
+            </Link>
+          </div>
+
+          {/* Tournament Stats */}
+          {/* <div className="card-glow hover-lift rounded-2xl border p-4 sm:p-6 slide-in backdrop-blur-sm" style={{ animationDelay: "0.3s" }}>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-6">Tournament Statistics</h2>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-xl p-4 border border-primary/20 hover:border-primary/50 transition-all">
+                <div className="text-xs sm:text-sm text-muted-foreground font-medium">Total Teams</div>
+                <div className="text-2xl sm:text-3xl font-black text-primary mt-2">{tournamentStats.totalTeams}</div>
+              </div>
+
+              <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-xl p-4 border border-amber-500/20 hover:border-amber-500/50 transition-all">
+                <div className="text-xs sm:text-sm text-muted-foreground font-medium">Players</div>
+                <div className="text-2xl sm:text-3xl font-black text-amber-500 mt-2">{tournamentStats.registeredPlayers}</div>
+              </div>
+
+              <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-xl p-4 border border-cyan-500/20 hover:border-cyan-500/50 transition-all">
+                <div className="text-xs sm:text-sm text-muted-foreground font-medium">Days</div>
+                <div className="text-2xl sm:text-3xl font-black text-cyan-500 mt-2">{tournamentStats.tournamentDays}</div>
+              </div>
+
+              <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-xl p-4 border border-emerald-500/20 hover:border-emerald-500/50 transition-all">
+                <div className="text-xs sm:text-sm text-muted-foreground font-medium">Prize Pool</div>
+                <div className="text-xl sm:text-2xl font-black text-emerald-500 mt-2">{tournamentStats.totalPrizePool}</div>
+              </div>
+
+              <div className="bg-gradient-to-br from-pink-500/10 to-rose-500/10 rounded-xl p-4 border border-pink-500/20 hover:border-pink-500/50 transition-all">
+                <div className="text-xs sm:text-sm text-muted-foreground font-medium">Channels</div>
+                <div className="text-2xl sm:text-3xl font-black text-pink-500 mt-2">{tournamentStats.channels}</div>
+              </div>
+
+              <div className="bg-gradient-to-br from-purple-500/10 to-indigo-500/10 rounded-xl p-4 border border-purple-500/20 hover:border-purple-500/50 transition-all">
+                <div className="text-xs sm:text-sm text-muted-foreground font-medium">Videos</div>
+                <div className="text-2xl sm:text-3xl font-black text-purple-500 mt-2">{tournamentStats.totalVideos}</div>
+              </div>
+            </div>
+          </div> */}
         </div>
 
         {/* Sidebar */}
