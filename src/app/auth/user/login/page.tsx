@@ -11,23 +11,16 @@ import { toast } from "sonner"
 import { Eye, EyeOff, Loader2, Trophy } from "lucide-react"
 import ForgotPasswordForm from "@/src/components/auth/forgot-password-form"
 import { GoogleLogin } from "@react-oauth/google"
-import FacebookLogin from "react-facebook-login"
 
 export default function UserLoginPage() {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [showForgotPassword, setShowForgotPassword] = useState(false)
-    const [googleClientId, setGoogleClientId] = useState("")
     const [formData, setFormData] = useState({
         email: "",
         password: "",
     })
-
-    useEffect(() => {
-        // Get Google Client ID from environment
-        setGoogleClientId(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "")
-    }, [])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -47,11 +40,6 @@ export default function UserLoginPage() {
             const data = await response.json()
 
             if (response.ok) {
-                // Check if user is admin - if so, redirect to user login selector
-                if (data.user?.role === "admin") {
-                    toast.error("Admin accounts cannot login here. Please use admin login.")
-                    return
-                }
                 toast.success("Login successful")
                 router.push("/dashboard")
             } else {
@@ -76,10 +64,6 @@ export default function UserLoginPage() {
             const data = await response.json()
 
             if (response.ok) {
-                if (data.user?.role === "admin") {
-                    toast.error("Admin accounts cannot login here. Please use admin login.")
-                    return
-                }
                 toast.success("Login successful")
                 router.push("/dashboard")
             } else {
@@ -95,45 +79,6 @@ export default function UserLoginPage() {
 
     const handleGoogleError = () => {
         toast.error("Google login failed")
-    }
-
-    const handleFacebookResponse = async (response: any) => {
-        if (!response.accessToken) {
-            toast.error("Facebook login failed")
-            return
-        }
-
-        setIsLoading(true)
-        try {
-            const authResponse = await fetch("/api/auth/oauth/facebook", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    accessToken: response.accessToken,
-                    userID: response.userID,
-                    name: response.name,
-                    email: response.email,
-                }),
-            })
-
-            const data = await authResponse.json()
-
-            if (authResponse.ok) {
-                if (data.user?.role === "admin") {
-                    toast.error("Admin accounts cannot login here. Please use admin login.")
-                    return
-                }
-                toast.success("Login successful")
-                router.push("/dashboard")
-            } else {
-                toast.error(data.error || "Facebook login failed")
-            }
-        } catch (error) {
-            console.error("[v0] Facebook login error:", error)
-            toast.error("An error occurred during Facebook login")
-        } finally {
-            setIsLoading(false)
-        }
     }
 
     if (showForgotPassword) {
@@ -274,15 +219,13 @@ export default function UserLoginPage() {
 
                     {/* OAuth buttons */}
                     <div className="space-y-3">
-                        {googleClientId && (
-                            <div className="flex justify-center">
-                                <GoogleLogin
-                                    onSuccess={handleGoogleSuccess}
-                                    onError={handleGoogleError}
-                                    width="100"
-                                />
-                            </div>
-                        )}
+                        <div className="flex justify-center">
+                            <GoogleLogin
+                                onSuccess={handleGoogleSuccess}
+                                onError={handleGoogleError}
+                                width="100"
+                            />
+                        </div>
 
                         {/* <FacebookLogin
                             appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || ""}

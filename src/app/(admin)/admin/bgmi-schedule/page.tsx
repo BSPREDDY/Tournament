@@ -7,7 +7,7 @@ import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Label } from "@/src/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/src/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/src/components/ui/dialog"
 import { toast } from "sonner"
 import { Trash2, Plus, Edit2 } from "lucide-react"
 import type { BgmiSchedule } from "@/src/db/schema/schema"
@@ -161,6 +161,9 @@ export default function BgmiSchedulePage() {
                     <DialogContent className="sm:max-w-md">
                         <DialogHeader>
                             <DialogTitle>{editingId ? "Edit Schedule" : "Create New Schedule"}</DialogTitle>
+                            <DialogDescription className="text-xs text-muted-foreground">
+                                Manage match date, slot time, and schedule parameters.
+                            </DialogDescription>
                         </DialogHeader>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="space-y-2">

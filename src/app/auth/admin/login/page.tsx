@@ -11,22 +11,16 @@ import { toast } from "sonner"
 import { Eye, EyeOff, Loader2, Crown } from "lucide-react"
 import ForgotPasswordForm from "@/src/components/auth/forgot-password-form"
 import { GoogleLogin } from "@react-oauth/google"
-import FacebookLogin from "react-facebook-login"
 
 export default function AdminLoginPage() {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [showForgotPassword, setShowForgotPassword] = useState(false)
-    const [googleClientId, setGoogleClientId] = useState("")
     const [formData, setFormData] = useState({
         email: "",
         password: "",
     })
-
-    useEffect(() => {
-        setGoogleClientId(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "")
-    }, [])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -44,10 +38,6 @@ export default function AdminLoginPage() {
             const data = await response.json()
 
             if (response.ok) {
-                if (data.user?.role !== "admin") {
-                    toast.error("Only admin accounts can access this page. Please use player login.")
-                    return
-                }
                 toast.success("Admin login successful")
                 router.push("/admin")
             } else {
@@ -72,10 +62,6 @@ export default function AdminLoginPage() {
             const data = await response.json()
 
             if (response.ok) {
-                if (data.user?.role !== "admin") {
-                    toast.error("Only admin accounts can access this portal. Please use player login.")
-                    return
-                }
                 toast.success("Admin login successful")
                 router.push("/admin")
             } else {
@@ -91,45 +77,6 @@ export default function AdminLoginPage() {
 
     const handleGoogleError = () => {
         toast.error("Google login failed")
-    }
-
-    const handleFacebookResponse = async (response: any) => {
-        if (!response.accessToken) {
-            toast.error("Facebook login failed")
-            return
-        }
-
-        setIsLoading(true)
-        try {
-            const authResponse = await fetch("/api/auth/oauth/facebook", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    accessToken: response.accessToken,
-                    userID: response.userID,
-                    name: response.name,
-                    email: response.email,
-                }),
-            })
-
-            const data = await authResponse.json()
-
-            if (authResponse.ok) {
-                if (data.user?.role !== "admin") {
-                    toast.error("Only admin accounts can access this portal. Please use player login.")
-                    return
-                }
-                toast.success("Admin login successful")
-                router.push("/admin")
-            } else {
-                toast.error(data.error || "Facebook login failed")
-            }
-        } catch (error) {
-            console.error("[v0] Facebook admin login error:", error)
-            toast.error("An error occurred during Facebook login")
-        } finally {
-            setIsLoading(false)
-        }
     }
 
     if (showForgotPassword) {
@@ -272,15 +219,13 @@ export default function AdminLoginPage() {
 
                     {/* OAuth buttons */}
                     <div className="space-y-3">
-                        {googleClientId && (
-                            <div className="flex justify-center">
-                                <GoogleLogin
-                                    onSuccess={handleGoogleSuccess}
-                                    onError={handleGoogleError}
-                                    width="100"
-                                />
-                            </div>
-                        )}
+                        <div className="flex justify-center">
+                            <GoogleLogin
+                                onSuccess={handleGoogleSuccess}
+                                onError={handleGoogleError}
+                                width="100"
+                            />
+                        </div>
 
                         {/* <FacebookLogin
                             appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || ""}

@@ -90,7 +90,7 @@ export default function AdminDashboard() {
             </div>
           </CardHeader>
           <CardContent className="px-4 sm:px-6">
-            <div className="text-3 sm:text-4xl font-black gradient-text">{userCount}</div>
+            <div className="text-3xl sm:text-4xl font-black gradient-text">{userCount}</div>
             <p className="text-xs text-muted-foreground mt-2 font-medium">Registered users</p>
           </CardContent>
         </Card>

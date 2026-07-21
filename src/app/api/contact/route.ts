@@ -6,9 +6,6 @@ import { UserContactFormTable } from "@/src/db/schema/schema"
 export async function POST(request: NextRequest) {
     try {
         const user = await getCurrentUser()
-        if (!user) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-        }
 
         const body = await request.json()
         const { name, email, subject, message } = body
@@ -25,7 +22,7 @@ export async function POST(request: NextRequest) {
         const [submission] = await db
             .insert(UserContactFormTable)
             .values({
-                userId: user.id,
+                userId: user ? user.id : null,
                 name,
                 email,
                 subject,

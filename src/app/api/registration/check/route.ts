@@ -21,8 +21,10 @@ export async function GET() {
         const teamCountResult = await db.select().from(FormDataTable)
         const currentTeams = teamCountResult.length
 
-        // Check if max teams reached
-        const isMaxReached = config.maxTeams && currentTeams >= parseInt(config.maxTeams.toString())
+        // Check if max teams reached (based on maxMatches where each match has 25 teams)
+        const maxMatchesLimit = parseInt(config.maxMatches || "0", 10)
+        const maxTeams = maxMatchesLimit * 25
+        const isMaxReached = maxMatchesLimit > 0 && currentTeams >= maxTeams
 
         // Check if deadline passed
         let isDeadlinePassed = false
@@ -38,7 +40,7 @@ export async function GET() {
         if (!config.isRegistrationOpen) {
             message = "Registration is currently closed"
         } else if (isMaxReached) {
-            message = `Maximum teams reached (${currentTeams}/${config.maxTeams}). Registration is now closed.`
+            message = `Maximum teams reached (${currentTeams}/${maxTeams}). Registration is now closed.`
         } else if (isDeadlinePassed) {
             message = "Registration deadline has passed"
         } else {
@@ -49,7 +51,7 @@ export async function GET() {
             isOpen,
             message,
             currentTeams,
-            maxTeams: config.maxTeams,
+            maxTeams,
             isMaxReached,
             isDeadlinePassed,
             isManualClosed: !config.isRegistrationOpen,

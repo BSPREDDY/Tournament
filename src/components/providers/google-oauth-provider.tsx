@@ -7,7 +7,7 @@ export function GoogleAuthProvider({ children }: { children: React.ReactNode }) 
     const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
 
     if (!googleClientId) {
-        console.warn('[v0] NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set. Google OAuth will not work.')
+        console.error('[v0] NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set. Google OAuth will not work.')
         return <>{children}</>
     }
 

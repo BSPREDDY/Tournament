@@ -460,6 +460,24 @@ export const MatchTeamsTable = pgTable("match_teams", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
 
+/* ---------------- VIDEOS TABLE ---------------- */
+export const VideosTable = pgTable("videos", {
+  id: uuid("id").primaryKey().defaultRandom(),
+
+  title: varchar("title", { length: 255 }).notNull(),
+  description: varchar("description", { length: 1000 }),
+  url: varchar("url", { length: 500 }).notNull(),
+  thumbnailUrl: varchar("thumbnail_url", { length: 500 }),
+  category: varchar("category", { length: 50 }).notNull(), // 'hero', 'live_stream', 'latest_videos', 'latest_tournament'
+
+  isLive: boolean("is_live").default(false).notNull(),
+  views: varchar("views", { length: 50 }).default("0"),
+  duration: varchar("duration", { length: 50 }),
+
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
+
 /* ---------------- TYPES ---------------- */
 export type User = typeof UserTable.$inferSelect
 export type FormData = typeof FormDataTable.$inferSelect
@@ -473,6 +491,7 @@ export type BgmiSchedule = typeof BgmiScheduleTable.$inferSelect
 export type UserContactForm = typeof UserContactFormTable.$inferSelect
 export type Match = typeof MatchesTable.$inferSelect
 export type MatchTeam = typeof MatchTeamsTable.$inferSelect
+export type Video = typeof VideosTable.$inferSelect
 
 /* ---------------- EXPORT SCHEMA ---------------- */
 export const dbSchema = {
@@ -488,4 +507,5 @@ export const dbSchema = {
   userContactForms: UserContactFormTable,
   matches: MatchesTable,
   matchTeams: MatchTeamsTable,
+  videos: VideosTable,
 } as const

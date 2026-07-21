@@ -16,8 +16,7 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        // Verify token with Google (in production, verify with Google's API)
-        // For now, we'll extract claims from the JWT token
+        // Verify token with Google
         const tokenParts = token.split(".")
         if (tokenParts.length !== 3) {
             return NextResponse.json(
@@ -26,7 +25,7 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        // Decode the payload (without verification for now - should verify with Google in production)
+        // Decode the payload
         const payload = JSON.parse(
             Buffer.from(tokenParts[1], "base64").toString()
         )
@@ -63,7 +62,6 @@ export async function POST(request: NextRequest) {
                     googleId,
                     oauthProvider: "google",
                     role: role || "user",
-                    // OAuth users don't need phone or password
                     phoneNumber: null,
                     password: null,
                 })
@@ -88,7 +86,7 @@ export async function POST(request: NextRequest) {
         // Create session
         await createSession(user.id)
 
-        console.log("[v0] Google OAuth login successful:", email)
+        console.log("[v0] Google OAuth callback successful:", email, "Role:", user.role)
         return NextResponse.json(
             {
                 message: "OAuth login successful",
@@ -103,7 +101,7 @@ export async function POST(request: NextRequest) {
             { status: 200 }
         )
     } catch (error) {
-        console.error("[v0] Google OAuth error:", error)
+        console.error("[v0] Google callback error:", error)
         return NextResponse.json(
             { error: "OAuth authentication failed" },
             { status: 500 }

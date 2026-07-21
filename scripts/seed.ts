@@ -1,6 +1,6 @@
-import { db } from '@/lib/db';
-import { UserTable } from '@/db/schema/schema';
-import { hashPassword } from '@/lib/hash';
+import { db } from '@/src/lib/db';
+import { UserTable } from '@/src/db/schema/schema';
+import { hashPassword } from '@/src/lib/hash';
 
 async function seed() {
     try {
@@ -14,7 +14,6 @@ async function seed() {
             email: 'admin@tournament.com',
             password: adminPassword,
             phoneNumber: '+1234567890',
-            age: 30,
             role: 'admin',
         }).onConflictDoNothing();
 
@@ -26,7 +25,6 @@ async function seed() {
             email: 'user@tournament.com',
             password: userPassword,
             phoneNumber: '+1234567891',
-            age: 25,
             role: 'user',
         }).onConflictDoNothing();
 

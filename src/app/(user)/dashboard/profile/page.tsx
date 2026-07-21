@@ -84,7 +84,7 @@ export default function ProfilePage() {
     return (
         <div className="flex flex-col min-h-screen bg-background">
 
-            <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8 flex-1">
+            <main className="max-w-6xl w-full mx-auto py-8 px-4 sm:px-6 lg:px-8 flex-1">
                 <div className="space-y-6">
                     <div className="flex items-center gap-4 animate-in slide-in-from-left-6 fade-in duration-500">
                         <Link href="/dashboard">
@@ -102,11 +102,11 @@ export default function ProfilePage() {
                     </div>
 
                     {/* Profile Card */}
-                    <Card className="card-glow w-full flex items-center">
-                        <CardHeader className="px-4 sm:px-6">
-                            <CardTitle className="text-xl sm:text-2xl font-bold text-primary">Personal Information</CardTitle>
+                    <Card className="card-glow w-full p-4 sm:p-6 space-y-4 border border-primary/20 bg-card/80 backdrop-blur-xl">
+                        <CardHeader className="p-0 pb-3 border-b border-white/10">
+                            <CardTitle className="text-xl sm:text-2xl font-extrabold text-white text-left">Personal Information</CardTitle>
                         </CardHeader>
-                        <CardContent className="px-6 sm:px-6">
+                        <CardContent className="p-0 pt-2">
                             {editing ? (
                                 <form onSubmit={handleUpdate} className="space-y-4">
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -172,15 +172,15 @@ export default function ProfilePage() {
                             ) : (
                                 <div className="space-y-6">
                                     {/* Avatar and Name */}
-                                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 items-center">
-                                        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/30 to-secondary/30 flex items-center justify-center animate-pulse">
-                                            <User className="w-10 h-10 text-primary" />
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-primary/30 to-secondary/30 flex items-center justify-center shrink-0 border border-primary/30">
+                                            <User className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
                                         </div>
-                                        <div className="flex-1">
-                                            <h3 className="text-xl sm:text-2xl font-semibold">
+                                        <div className="flex-1 text-left space-y-1">
+                                            <h3 className="text-xl sm:text-2xl font-bold text-white leading-tight">
                                                 {user?.firstName} {user?.lastName}
                                             </h3>
-                                            <p className="text-muted-foreground capitalize text-sm sm:text-base">{user?.role}</p>
+                                            <p className="text-slate-300 font-medium capitalize text-xs sm:text-sm">{user?.role}</p>
                                         </div>
                                     </div>
 

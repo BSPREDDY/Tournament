@@ -1,23 +1,23 @@
 import { neon } from "@neondatabase/serverless"
-import { generateMSG91WidgetToken } from "@/src/lib/sms-service"
+import { generateOTP, sendOTPEmail } from "@/src/lib/email-service"
 
 export async function POST(req: Request) {
     try {
-        const { phoneNumber } = await req.json()
+        const { email } = await req.json()
 
-        if (!phoneNumber) {
-            console.warn("Send OTP request without phone number")
+        if (!email) {
+            console.warn("Send OTP request without email")
             return Response.json(
-                { error: "Phone number is required" },
+                { error: "Email is required" },
                 { status: 400 }
             )
         }
 
-        // Validate phone number format
-        if (!/^\+\d{10,15}$/.test(phoneNumber)) {
-            console.warn("Invalid phone format:", phoneNumber)
+        // Validate email format
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            console.warn("Invalid email format:", email)
             return Response.json(
-                { error: "Invalid phone number format" },
+                { error: "Invalid email format" },
                 { status: 400 }
             )
         }
@@ -27,36 +27,62 @@ export async function POST(req: Request) {
         // Check if user exists
         const userResult = await sql`
             SELECT id FROM users 
-            WHERE phone_number = ${phoneNumber}
+            WHERE email = ${email}
         `
 
         if (userResult.length === 0) {
-            console.warn("Phone number not registered:", phoneNumber)
+            console.warn("Email not registered:", email)
             return Response.json(
-                { error: "Phone number not registered" },
+                { error: "Email not registered" },
                 { status: 404 }
             )
         }
 
-        // Generate MSG91 widget token
-        const tokenResult = await generateMSG91WidgetToken(phoneNumber)
+        // Generate OTP
+        const otp = generateOTP()
 
-        if (!tokenResult.success) {
-            console.error("MSG91 widget token generation failed:", tokenResult.error)
+        // Delete any existing OTP for this email
+        await sql`DELETE FROM verification_tokens WHERE identifier = ${email}`
+
+        // Calculate expiry time: 10 minutes from now
+        const expiryTime = new Date(Date.now() + 10 * 60 * 1000)
+
+        console.log("[v0] OTP Generation - Email:", email, "OTP:", otp, "Now:", new Date().toISOString(), "Expires:", expiryTime.toISOString())
+
+        // Insert new OTP - let database handle the timezone
+        await sql`
+            INSERT INTO verification_tokens (identifier, token, expires_at)
+            VALUES (${email}, ${otp}, to_timestamp(${expiryTime.getTime()} / 1000.0))
+        `
+
+        // Send OTP to email
+        const emailSent = await sendOTPEmail(email, otp)
+
+        if (!emailSent) {
+            console.error("Failed to send OTP email to:", email)
             return Response.json(
-                { error: tokenResult.error || "Failed to generate OTP widget token" },
+                { error: "Failed to send OTP email" },
                 { status: 500 }
             )
         }
 
-        console.log("[v0] OTP widget generated for phone:", phoneNumber)
+        console.log("[v0] OTP sent to email:", email)
         return Response.json({
             success: true,
-            token: tokenResult.token,
-            message: "OTP widget ready",
+            message: "OTP sent to email",
         }, { status: 200 })
     } catch (error) {
         console.error("[v0] Send OTP error:", error)
+
+        // Check if it's a credentials issue
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS_2) {
+            console.error("[v0] Missing email credentials: EMAIL_USER or EMAIL_PASS_2")
+            return Response.json(
+                { error: "Email service not configured. Please contact administrator." },
+                { status: 500 }
+            )
+        }
+
         return Response.json(
             { error: "Failed to send OTP", success: false },
             { status: 500 }

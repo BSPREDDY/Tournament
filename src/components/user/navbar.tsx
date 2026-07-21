@@ -117,6 +117,7 @@ export function UserNavbar({ user }: UserNavbarProps) {
                     </div>
 
                     {/* Theme Toggle */}
+                    {/* 
                     {mounted && (
                         <Button
                             variant="ghost"
@@ -130,7 +131,7 @@ export function UserNavbar({ user }: UserNavbarProps) {
                                 <Moon className="w-5 h-5 text-slate-700" />
                             )}
                         </Button>
-                    )}
+                    )} */}
 
                     {/* User Dropdown */}
                     <DropdownMenu>
@@ -153,14 +154,13 @@ export function UserNavbar({ user }: UserNavbarProps) {
 
                         <DropdownMenuContent
                             align="end"
-                            className="w-56 rounded-xl border border-primary/10
-              bg-card/95 backdrop-blur-xl shadow-xl"
+                            className="w-64 sm:w-72 max-w-[92vw] rounded-xl border border-primary/20 bg-slate-900/95 backdrop-blur-2xl shadow-2xl p-2 text-white"
                         >
-                            <DropdownMenuLabel>
-                                <p className="text-sm font-semibold">
+                            <DropdownMenuLabel className="p-2 space-y-0.5">
+                                <p className="text-sm font-bold text-white truncate text-left">
                                     {user.firstName} {user.lastName}
                                 </p>
-                                <p className="text-xs text-muted-foreground">{user.email}</p>
+                                <p className="text-xs text-slate-300 truncate font-mono text-left">{user.email}</p>
                             </DropdownMenuLabel>
 
                             <DropdownMenuSeparator />

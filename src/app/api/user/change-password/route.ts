@@ -23,6 +23,10 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "User not found" }, { status: 404 })
         }
 
+        if (!userWithPassword.password) {
+            return NextResponse.json({ error: "Password is not set for this account. Please set a password first." }, { status: 400 })
+        }
+
         const isValid = await bcrypt.compare(currentPassword, userWithPassword.password)
         if (!isValid) {
             return NextResponse.json({ error: "Current password is incorrect" }, { status: 400 })

@@ -251,19 +251,19 @@ export async function POST(request: NextRequest) {
     // Sanitize form data: convert empty strings to null, trim whitespace
     const sanitizedData = {
       ...formData,
-      teamName: formData.teamName?.trim() || null,
-      iglName: formData.iglName?.trim() || null,
-      player1: formData.player1?.trim() || null,
-      playerId1: formData.playerId1?.trim() || null,
-      player2: formData.player2?.trim() || null,
-      playerId2: formData.playerId2?.trim() || null,
+      teamName: formData.teamName.trim(),
+      iglName: formData.iglName.trim(),
+      player1: formData.player1.trim(),
+      playerId1: formData.playerId1.trim(),
+      player2: formData.player2.trim(),
+      playerId2: formData.playerId2.trim(),
       player3: formData.player3?.trim() || null,
       playerId3: formData.playerId3?.trim() || null,
       player4: formData.player4?.trim() || null,
       playerId4: formData.playerId4?.trim() || null,
-      iglMail: formData.iglMail?.trim().toLowerCase() || null,
+      iglMail: formData.iglMail.trim().toLowerCase(),
       iglAlternateMail: formData.iglAlternateMail?.trim().toLowerCase() || null,
-      iglNumber: formData.iglNumber?.trim() || null,
+      iglNumber: formData.iglNumber.trim(),
       iglAlternateNumber: formData.iglAlternateNumber?.trim() || null,
     }
 

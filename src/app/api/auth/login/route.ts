@@ -25,6 +25,14 @@ export async function POST(request: NextRequest) {
         }
 
         // Verify password
+        if (!user.password) {
+            console.warn("Login attempt for password-less (OAuth) user:", email);
+            return NextResponse.json(
+                { error: 'Invalid credentials' },
+                { status: 401 }
+            );
+        }
+
         const isValidPassword = await verifyPassword(password, user.password);
         if (!isValidPassword) {
             console.warn("Invalid password for user:", email);
